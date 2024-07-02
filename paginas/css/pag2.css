@@ -1,0 +1,106 @@
+body {
+  background: url(../imagen/titulo3.jpg);
+  background-position: 0px   0px;
+  }
+
+*{
+  margin: 0px;
+  padding: 0px;
+}
+.cuadro{
+  display: block;
+  list-style: none;
+  padding: 60px;
+  margin: 120px;
+  margin-top: 15px;
+
+}
+
+li>a{
+  text-decoration: none;
+  font-size: 12px;
+}
+.cuadro>li{
+  margin: 30px;
+  background: cornflowerblue;
+  border: 1.5px solid;
+  padding: 8px;
+  width:105px;
+  text-align: center;
+  display: block;
+  border-radius: 6px;
+  color:white;
+}
+
+.transversal{
+  margin: 8px;
+  justify-content: center;
+  text-align: center;
+  float: left;
+  margin-left: 280px;
+}
+h1{
+  text-transform: uppercase;
+  color:red;
+  font-size:40px;
+}
+.lado{
+  list-style: none;
+  display: none;
+  width:200px;
+  position:absolute;
+  background:none;
+  left:95px;
+  bottom: -14px;
+  padding: 8px;
+}
+.cuadro li:hover .lado {
+  display: block;q
+}
+.lado>li{
+  padding: 8px;
+  display: block;
+  animation: animar-texto 1s ease-in-out 1 normal both;
+  
+}
+@keyframe animar-texto{
+  from {
+    transform: scale3d(1,1,1)
+  }
+  40%{
+    transform: scale3d(.75,1.25,1);
+    color:#4FDBB8;
+  }
+  50%{
+    transform: scale3d(1.15,0.85,1);
+  }
+  
+  
+}
+.lado>li>a{
+  background: gray;
+  padding: 6px;
+  border: 1.5px solid blue;
+  border-radius: 5px;
+}
+.cuadro>li:hover{
+  transform: scale(1.1);
+}
+
+.esquina{
+   list-style: none;
+  display: none;
+  width:200px;
+  position:absolute;
+  background:none;
+  left:90px;
+  bottom: -42px;
+}
+.cuadro li :hover .esquina{
+  display: block;
+}
+.esquina>li{
+  display: block;
+  padding: 10px;
+  
+}

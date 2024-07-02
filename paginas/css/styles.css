@@ -1,0 +1,80 @@
+body {
+	background: url(../imagen/franja1.jpg);
+	background-repeat: no-repeat;
+	background-position: center;
+	margin:40px;
+	padding: 30px;
+	 overflow-x: hidden;	 
+}
+*{
+	margin:  0;
+	padding: 0;
+	font-family: century Gothic;
+	}
+
+header {
+padding: 30px;
+width: 1000px;
+height: 800px;
+margin: 30px;
+
+}
+.conte1{
+
+display:flex;
+justify-content: center;
+padding: 30px;
+text-align: center;
+margin-top: -45px;
+}
+.contenedor{
+	padding: 25px;
+}
+
+.conte2{
+display:flex;
+justify-content: center;
+padding: 30px;
+text-align: center;
+/*margin-left: 80px;*/
+margin-top:-180px;
+}
+.contenedor2{
+	padding: 25px;
+}
+
+
+b{
+align-items: center;
+color: white;
+font-size: 12px;
+text-decoration:none;
+margin: 30px;
+}
+#uno 
+	{
+		padding-top: 160px}
+#dos
+	{
+		padding-top: 160px}
+
+#tres
+	{
+		padding-top: 160px}
+#cuatro
+	{
+		padding-top: 160px}
+
+#cinco 
+	{
+		padding-top: 160px}
+#seis
+	{
+		padding-top: 160px}
+
+#siete 
+	{
+		padding-top: 160px}
+#ocho
+	{
+		padding-top: 160px}
