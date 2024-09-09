@@ -1,0 +1,167 @@
+<html>
+  <head>
+    <title></title>
+    <meta content="">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style></style>
+    <script type="text/javascript">
+    (function(document) {
+      'use strict';
+
+      var LightTableFilter = (function(Arr) {
+
+        var _input;
+
+        function _onInputEvent(e) {
+          _input = e.target;
+          var tables = document.getElementsByClassName(_input.getAttribute('data-table'));
+          Arr.forEach.call(tables, function(table) {
+            Arr.forEach.call(table.tBodies, function(tbody) {
+              Arr.forEach.call(tbody.rows, _filter);
+            });
+          });
+        }
+
+        function _filter(row) {
+          var text = row.textContent.toLowerCase(), val = _input.value.toLowerCase();
+          row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
+        }
+
+        return {
+          init: function() {
+            var inputs = document.getElementsByClassName('light-table-filter');
+            Arr.forEach.call(inputs, function(input) {
+              input.oninput = _onInputEvent;
+            });
+          }
+        };
+      })(Array.prototype);
+
+      document.addEventListener('readystatechange', function() {
+        if (document.readyState === 'complete') {
+          LightTableFilter.init();
+        }
+      });
+
+    })(document);
+    </script>
+  </head>
+  <body>
+    <div class="container">
+    	<p align="center">
+      <div style="height:50px"></div>
+      <h1>PERSONAL DOCENTE Y ADMINISTRATIVO 2024</h1>
+      <p class="lead">
+
+<p align="center">
+      <table class="order-table ">
+        <thead>
+          <tr>
+            <th>Nº Docentes Nivel Secundario =14<td></td></th>
+            <th>Nº Docentes Nivel Primario =9<td></td></th>
+            <th>P.Administrativos= 7<td></td></th>
+          </tr>
+        </thead>
+</table>
+</p>
+<p align="center">
+      <h3>Buscar Docente</h3>
+      <p align="center">
+      <input class="form-control col-md-3 light-table-filter" data-table="order-table" type="text" placeholder="nombre de docente">
+  </p>
+      <hr>
+</p>
+<style type="text/css">
+	table.order-table{
+		font-size: 12px;
+		border: 1px solid #CCC; 
+		font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+	} 
+	.order-table td {
+		padding: 4px;
+		margin: 3px;
+		border: 1px solid #CCC;
+	}
+	.order-table th {
+		background-color: #104E8B; 
+		color: #FFF;
+		font-weight: bold;
+    padding: 10px;
+	}
+	h1, h3 {
+		text-align: center;
+	}
+.central{
+  justify-content: center;
+}
+
+</style>
+<p align="center">
+      <table class="order-table ">
+        <thead>
+          <tr>
+            <th>SECUNDARIO</th>
+            <th>APELLIDO PATERNO</th>
+            <th>APELLIDO MATERNO</th>
+            <th>NOMBRES</th>
+            <th>AREA/CARGO</th>
+            <th>DNI</th>
+<th>CELULAR</th>
+          </tr>
+        </thead>
+      
+<tbody>
+<tr><td>DIRECTOR</td><td>LOZA</td><td>DURAN</td><td>MARCOS L.</td><td>DIRECTOR</td><td>214022777</td><td>991273000</td></tr>
+<tr><td>TUTOR-1º</td><td>PACHECO</td><td>GARCIA</td><td>JUDITH</td><td>FISICA</td><td></td><td>949087883</td></tr>
+ <tr><td>TUTOR-2º</td><td>GARCIA </td><td>RAMOS</td><td>WILLIAM</td><td>CC.SS</td><td>15361467</td><td>949439982</td></tr>
+ <tr><td>TUTOR-3º</td><td>CALAGUA </td><td>LA ROSA</td><td>RICHARD</td><td>EPT</td><td>44879804</td><td>991320446</td></tr>
+ <tr><td>TUTOR-4º</td><td>GUTIERREZ</td><td>LUYO</td><td>LUIS ALBERTO</td><td>CYT</td><td>15423772</td><td>991877923</td></tr>
+ <tr><td>TUTOR-5º</td><td>CARPIO </td><td>VILARRUBIA</td><td>ROXANA</td><td>MATEMATICA</td><td></td><td>988290337</td></tr>
+ <tr><td>CORD TUTORIA</td><td>SAAVEDRA </td><td>FERRER</td><td>CRECENCIO</td><td>MATEMATICA</td><td>15434411</td><td>966669616</td></tr>
+ <tr><td>CORD PEDAGOGICO</td><td>ALVAREZ </td><td>HOLGUIN</td><td>FRANCISCO</td><td>COMUNICACION</td><td>15421505</td><td>925494941</td></tr>
+<tr><td>DOCENTE</td><td>HERNANDEZ</td><td>HERNANDEZ</td><td>LUIS ALFREDO</td><td>ARTE</td><td></td><td></td></tr>
+ <tr><td>DOCENTE</td><td>OLIVARES</td><td> </td><td>NILLS</td><td>RELIGION</td><td></td><td></td></tr>
+ <tr><td>DOCENTE</td><td>ESPINOZA</td><td>FALCON</td><td>KATIA</td><td>INGLES</td><td></td><td></td></tr>
+ <tr><td>DOCENTE</td><td>MORAN</td><td>VASQUEZ</td><td>ROSA AMELIA</td><td>DPCC</td><td></td><td></td></tr>
+ <tr><td>DOCENTE</td><td>QUISPE</td><td>TATAJE</td><td>ERNESTO</td><td>MATEMATICA</td><td></td><td></td></tr>
+ <tr><td>DOCENTE</td><td>RUEDA</td><td>APOLAYA</td><td>ESTHER PATRICIA</td><td>COMUNICACION</td><td></td><td></td></tr>
+ <tr><td>ADMINISTRATIVO</td><td>MANRIQUE</td><td></td><td>MICHELL</td><td>PSICOLOGIO</td><td></td><td></td></tr>
+ <tr><td>ADMINISTRATIVO</td><td>CORTEZ</td><td>GARCIA</td><td>ANGEL</td><td>CIST</td><td></td><td></td></tr>
+ <tr><td>ADMINISTRATIVO</td><td>MALASQUEZ</td><td>HINOSTROZA</td><td>MARIA</td><td>VIGILANTE</td><td></td><td></td></tr> 
+ <tr><td>ADMINISTRATIVO</td><td>ABURTO</td><td>CAMPOS</td><td>EUSEBIO</td><td>P.S</td><td>15361313</td><td>999243837</td></tr>
+ <tr><td>DOCENTE</td><td>CHUMPITAZ</td><td>VILLALOBOS</td><td>FELIPE</td><td>AUXILIAR</td><td>15361456</td><td>975581083</td></tr>
+ <tr><td>ADMINSTRATIVO</td><td>CAMPOS</td><td>ABURTO</td><td>DUWERLIS KARINA</td><td>VIGILANTE</td><td>70452749</td><td>979492322</td></tr>
+
+ <tr><th>PRIMARIO</th><th>APELLIDO PATERNO</th><th>APELLIDO MATERNO</th><th>NOMBRES</th><th>AREA/CARGO</th><th>DNI</th><TH>CELULAR</TH></tr>
+ <tr><td>1º UNICO</td><td>URBINA</td><td>CORONADO</td><td>JACQUELINE</td><td>PROF. DE AULA</td><td>03655606</td><td>957581776</td></tr>
+<tr><td>2º UNICO</td><td>AVALOS</td><td>CHUMPITAZ</td><td>RAQUEL</td><td>PROF. DE AULA</td><td>40805254</td><td>980102592</td></tr>
+<tr><td>3º A</td><td>FRANCIA</td><td>CALAGUA</td><td>MARIBEL</td><td>PROF. DE AULA</td><td>15354482</td><td>902256421</td></tr>
+<tr><td>3º B</td><td>HUASACCA</td><td>ALBITE</td><td>CUPRTINA GRACIELA</td><td>PROF. DE AULA</td><td>15422224</td><td>999069272</td></tr>
+<tr><td>4º A</td><td>CORONEL </td><td>TORRES</td><td>ADRIAN</td><td>PROF. DE AULA</td><td>15425891</td><td>957600337</td></tr>
+<tr><td>4º B</td><td>CHACARA</td><td>HUARCAYA</td><td>LEANDRA</td><td>PROF. DE AULA</td><td>15419625</td><td>953543832</td></tr>
+<tr><td>5º UNICO</td><td>RAMOS</td><td>GARCIA</td><td>AMELIA LUZ</td><td>PROF. DE AULA</td><td>15360072</td><td>987289224</td></tr>
+<tr><td>6º A</td><td>VALDIVIA</td><td>RODRIGUEZ</td><td>NANCY</td><td>PROF. DE AULA</td><td>15369862</td><td>954360941</td></tr>
+<tr><td>6º B</td><td>PAUCAR</td><td>YACHI</td><td>CAROLINA</td><td>PROF. DE AULA</td><td>40023588</td><td>940095809</td></tr>
+<tr><td>ADMINISTRATIVO</td><td>QUISPE</td><td>TORIBIO</td><td>FRANCISCO ISIDORO</td><td>P.S</td><td>43387145</td><td>927902181</td></tr>
+ 
+</tbody>
+ </table>
+</p>
+    </div> <!-- /container -->
+<script type="text/javascript">
+  
+function mostrar(){
+  swal('desea continuar');
+}
+
+
+</script>
+<P align="center"  >
+<a href="javascript:window.print()";)>Imprimir</a>
+</P>
+
+
+
+  </body>
+</html>

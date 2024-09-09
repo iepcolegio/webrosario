@@ -1,0 +1,357 @@
+<html>
+  <head>
+    <title></title>
+    <meta content="">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style></style>
+    <script type="text/javascript">
+    (function(document) {
+      'use strict';
+
+      var LightTableFilter = (function(Arr) {
+
+        var _input;
+
+        function _onInputEvent(e) {
+          _input = e.target;
+          var tables = document.getElementsByClassName(_input.getAttribute('data-table'));
+          Arr.forEach.call(tables, function(table) {
+            Arr.forEach.call(table.tBodies, function(tbody) {
+              Arr.forEach.call(tbody.rows, _filter);
+            });
+          });
+        }
+
+        function _filter(row) {
+          var text = row.textContent.toLowerCase(), val = _input.value.toLowerCase();
+          row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
+        }
+
+        return {
+          init: function() {
+            var inputs = document.getElementsByClassName('light-table-filter');
+            Arr.forEach.call(inputs, function(input) {
+              input.oninput = _onInputEvent;
+            });
+          }
+        };
+      })(Array.prototype);
+
+      document.addEventListener('readystatechange', function() {
+        if (document.readyState === 'complete') {
+          LightTableFilter.init();
+        }
+      });
+
+    })(document);
+    </script>
+  </head>
+  <body>
+
+    <div class="container">
+    	<p align="center">
+      <div style="height:50px"></div>
+      <h1>ESTUDIANTES DEL NIVEL PRIMARIO</h1>
+      <p class="lead">
+
+<p align="center">
+      <table class="order-table ">
+        <thead>
+          <tr>
+            <th>1º UNICO = 32 alumnos</th>
+            <th>2º UNICO = 30 alumnos</th>
+            <th>3º A = 20 alumnos</th>
+            <th>3º B = 24 alumnos</th>
+            <th>4º A = 26 alumnos</th>
+            <th>4º B = 15 alumnos</th>
+            <th>5º UNICO = 28 alumnos</th>
+            <th>6º A = 2O alumnos</th>
+            <th>6º B = 21 alumnos</th>
+          </tr>
+        </thead>
+</table>
+</p>
+<p align="center">
+
+      <h3>Buscar Estudiante</h3>
+      <p align="center">
+      <input class="form-control col-md-3 light-table-filter" data-table="order-table" type="text" placeholder="nombre de estudiante">
+  </p>
+      <hr>
+</p>
+<style type="text/css">
+	table.order-table{
+		font-size: 12px;
+		border: 1px solid #CCC; 
+		font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+	} 
+	.order-table td {
+		padding: 4px;
+		margin: 3px;
+		border: 1px solid #CCC;
+	}
+	.order-table th {
+		background-color: #104E8B; 
+		color: #FFF;
+		font-weight: bold;
+    border:3px solid white;
+    padding: 5px;
+	}
+	h1, h3 {
+		text-align: center;
+	}
+.central{
+  justify-content: center;
+}
+
+</style>
+<p align="center">
+      <table class="order-table">
+        <thead>
+          <tr>
+            <th>GRADO</th>
+            <th>APELLIDO PATERNO</th>
+            <th>APELLIDO MATERNO</th>
+            <th>NOMBRES</th>
+            <th>SEXO</th>
+            <th>DATOS</th>
+          </tr>
+        </thead>
+      
+<tbody>
+<tr><td>1º</td><td>ABARCA</td><td>TERAN</td><td>BRAYAM JHAIR</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>ABARCA</td><td>TERAN</td><td>BRIYIT ODETH</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>ABURTO</td><td>PEREZ</td><td>JIMENA LORENZA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>ABURTO </td><td>ZAMUDIO</td><td>BRIANA JIMENA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>ALVARO</td><td>ARIAS</td><td>ALEJANDRO BENJAMIN</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>ARIAS</td><td>AVALOS</td><td>ALEX JUNNIOR</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>ARIAS</td><td>RAMOS </td><td>YONI ABRAHAM</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>AVALOS </td><td>CARDENAS</td><td>ASTRID MIA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>AVALOS </td><td>ESPINOZA</td><td>DANEY KIUNMI</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>AVALOS</td><td>HERRERA</td><td>ALESSIA BRIANA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>AVALOS</td><td>RAMOS</td><td>BRIANNA SOFIA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>BERNAOLA</td><td>ZAMUDIO </td><td>MIKAEL ISAIAS</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>CACERES</td><td>POMES</td><td>GIANINA ALEXANDRA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>CAMPOS</td><td>ARIAS</td><td>ARIADNHY LUANETTE</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>CANDELA </td><td>CASTILLO</td><td> ALONDRA GAELA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>CARPIO </td><td>AMIAS</td><td>GENESIS LUCIANA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>CHUMPITAZ </td><td>DIAZ</td><td>ALEXIA NIJHAN</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>CONDORI</td><td>OLORTEGUI</td><td>LUCAS VICTOR JOSE</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>HERNANDEZ </td><td>MAURICIO</td><td>KAYLA ZOE ABBY</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>HUACHACA</td><td>MARIANO </td><td>SHAMIRA CRISTINA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>NAPAN</td><td>ARIAS</td><td>NOA ALVIERA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>NIGLIO</td><td>LUCERO</td><td>GIANLUCA MATTEO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>OSCCO </td><td>RODRIGUEZ</td><td>MILAN SEBASTIAN</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>RAMOS</td><td>VIERA</td><td>ALAANA FRANCCESCA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>RODRIGUEZ  </td><td>ABURTO</td><td>KARIM AUGUSTO</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>ROMERO </td><td>PAREDES</td><td>KATALEYA ISABEL VALENTINA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>VICENTE </td><td>QUISPE</td><td>NICOLAS MOISES</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>VILCA</td><td>ARIAS </td><td>HUGO JUAN</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>VILLALOBOS </td><td>ARIAS</td><td>MATHIUS OCTAVIO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>1º</td><td>VILLALOBOS </td><td>CAMPOS </td><td>VAYOLET CATALINA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+<tr><td>1º</td><td>YAYA </td><td>LARA</td><td>RAFAELA ISABEL</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+  <tr><td>2º</td><td>ABURTO </td><td>ZAVALA</td><td>KALESSIA BELEN</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>ALCANTARA </td><td>CHUMPITAZ</td><td>IVANA LUCIANA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>ARONE </td><td>AVALOS</td><td>JEFFERSON DEL PIERO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>BRAVO </td><td>PIO</td><td>DOMINIC HECTOR MANUEL</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>CAMPOS </td><td>AQUINO</td><td>SAMIR ALDAIR</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>CAMPOS </td><td>AVALOS</td><td>ROCIO DANNIA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>CAMPOS </td><td>BRAVO</td><td>LUCAS VALENTIN</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>CAMPOS </td><td>HUAPAYA</td><td>ALESSIO SANTIAGO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>CANDELA </td><td>GARCIA</td><td>CARLOS RAUL</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>CARBAJAL</td><td>RIVERA</td><td>FERNANDA VALENTINA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>CASILLA</td><td>ARCOS</td><td>SAORI VICTORIA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>CEDEÑO</td><td>RODRIGUEZ </td><td>ALONDRA VALENTINA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>CHAVEZ</td><td>MACEDO</td><td>XIOMARA THAIS</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>CHUCHON </td><td>RAMOS</td><td>JOSE LUIS</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>CHUMPITAZ</td><td>LOPEZ</td><td> MASIEL VICTORIA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>CHUMPITAZ</td><td>QUISPE</td><td>LYAN VALENTINO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>CHUMPITAZ</td><td>RONCEROS</td><td>DIEGO FACUNDO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>FERREYRA</td><td>MORI</td><td>EMILY KATHERINE</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>GONZALES</td><td>ABURTO</td><td>MARIANO JESUS</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+<tr><td>2º</td><td>LESCANO </td><td>SANCHEZ</td><td>SARITA KAORI</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>MEZA  </td><td>CHUMPITAZ</td><td>FERNANDA BEATRIZ</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>ORE</td><td>JANAMPA</td><td>SMITH CRISMAN</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>PIGUAY</td><td>DOMINGUEZ</td><td>ANDREA ALEXANDRA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>PISFIL</td><td>FLORES</td><td>EDEN DEL MILAGRO</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>RAMOS </td><td>ARIAS</td><td>ALONDRA YAZMIN</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>2º</td><td>RODRIGUEZ</td><td>TORRES</td><td>AXEL DARIEL</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º A</td><td>ABURTO</td><td>RAMOS</td><td>SEBASTIAN JUSTO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º A</td><td>AGUILAR</td><td>DIAZ</td><td>LUIS DAN</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º A</td><td>ALIAGA</td><td>SALAZAR</td><td>MILLER JOSE</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º A</td><td>AVALOS</td><td>ESPINOZA</td><td>MAYUMI MISHELL</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º A</td><td>CARRILLO</td><td>FIERRO</td><td>NICK JUNIOR</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º A</td><td>CHUMPITAZ</td><td>CHUMPITAZ</td><td>ANTONHY NICOLAS</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º A</td><td>CHUMPITAZ</td><td>CISNEROS</td><td>ALESHKA SHERYL</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º A</td><td>ESPINOZA</td><td>AVALOS</td><td>CARLOS EDUARDO JUMPIO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º A</td><td>FLORES</td><td>RAMOS</td><TD>DAVID ALEPH</TD><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º A</td><td>MALASQUEZ </td><td>CHUMPITAZ</td><td>IVANNA LUCIANA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º A</td><td>MORAN</td><td>RIVAS</td><td>TIZIANA VALENTINA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º A</td><td>MOSCOL</td><td>CAVERO</td><td>LUCIANA BELEN</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º A</td><td>PALACIOS </td><td>RAMOS</td><td>ROUSSE YOALIBETH</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º A</td><td>QUISPE</td><td>HERNANDEZ</td><td>EVANS GAEL</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º A</td><td>QUISPE </td><td>PISFIL</td><td>SOFIA YOVANA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º A</td><td>RIVAS </td><td>FELIX</td><td>ELIZABETH FRANCESCA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º A</td><td>RODRIGUEZ </td><td>ANGULO</td><td>FLAVIA CALESI</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º A</td><td>RODRIGUEZ </td><td>AVALOS</td><td>MANUEL IGNACIO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º A</td><td>VILCHEZ</td><td>GUZMAN</td><td>MATEO DEMETRIO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º A</td><td>VILLALOBOS</td><td>QUISPE</td><td>FREDY ARTURO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>ALCANTARA</td><td>CHUMPITAZ </td><td>CRITOFER SANTIAGO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>AMABLE </td><td>ROQUE</td><td>OLGA YARUMI</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>ARIAS </td><td>ABURTO </td><td>ALICIA ISABELLA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>ARIAS </td><td>SALINAS</td><td>JHON ANTHONY LEYNER</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>AVALOS</td><td>HUAMANCHA</td><td>LIAM MATEO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>AVALOS </td><td>SALVADOR</td><td>DIEGO ANDRE</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>CAMPOS</td><td>BLANCO</td><td>MARTHA ARASELI</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>CANDELA </td><td>RIOS</td><td>LIAM BENJAMIN</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>CHUMPITAZ</td><td>BELEN</td><td>DYLAM FABRICIO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>CHUMPITAZ</td><td>PAREDES</td><td>ARIANA VICTORIA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>CORDOVA</td><td>GARCIA</td><td>LUIS RAUL</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>FRANCIA</td><td>RAMOS</td><td>DIAGO DARIELL</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>HERNANDEZ </td><td>VALDIVIA</td><td>ANDREA MILETT</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>HUAMAN</td><td>AVALOS</td><td>RAQUEL MERILUZ</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>MALASQUEZ </td><td>BARRIENTOS</td><td>JUAN DE DIOS DIXON</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>MALASQUEZ</td><td>GUARNIZ </td><td>JOHAN LIONEL</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>MALASQUEZ</td><td>MARIANO</td><td>ALINNSON MARIEL</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>PEREZ</td><td>RAMOS</td><td>BRITANY BRIANNA LINET</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>QUISPE</td><td>FRANCIA</td><td>FRANCHESCA CECILIA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>RAMOS</td><td>PEREZ</td><td>NATALIEL NILUFER</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>RIOS </td><td>GARCIA </td><td>LUZ JOHANA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>VILCA </td><td>ARIAS</td><td>DELIA MAGDALENA VENUS</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>3º B</td><td>VILLALOBOS </td><td>QUISPE</td><td>MARIA DE LOS ANGELES</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>TOMAS</td><td>PULIDO</td><td>DANNA PAOLA</td><td>F</td><td><a href="javascript:window.open('Fichas/TOMASPULIDO.html','','width=300,height=350');">Ficha</a></td></tr>
+ <tr><td>4º A</td><td>ARIAS</td><td>AVALOS</td><td>ALEJANDRA VALENTINA NOEMI</td><td>F</td><td><a href="javascript:window.open('Fichas/ARIASAVALOS1.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>ARIAS</td><td>VILLALOBOS</td><td>SANTIAGO EMILIO</td><td>M</td><td><a href="javascript:window.open('Fichas/ARIASVILLALOBOS.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>CHUMPITAZ </td><td>LOPEZ</td><td>JEAMS AARON</td><td>M</td><td><a href="javascript:window.open('Fichas/CHUMPITAZLOPEZ.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>LOPEZ </td><td>ROMERO</td><td>ERICK SEBASTIAN</td><td>M</td><td><a href="javascript:window.open('Fichas/LOPEZROMERO.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>CAMACHO </td><td>ABURTO</td><td>DIEGO SEBASTIAN</td><td>M</td><td><a href="javascript:window.open('Fichas/CAMACHOABURTO.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>ABURTO</td><td>QUISPE</td><td>VALENTINA CRISTINA</td><td>F</td><td><a href="javascript:window.open('Fichas/ABURTOQUISPE.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>TASAYCO </td><td>ROJAS</td><td>HASABNA KERLY</td><td>F</td><td><a href="javascript:window.open('Fichas/TASAYCOROJAS.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>CHUMPITAZ </td><td>DIAS</td><td>NUASH JACOB</td><td>M</td><td><a href="javascript:window.open('Fichas/CHUMPITAZDIAZ.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>CHUMPITAZ </td><td>CHUMPITAZ</td><td>ESTAFANI MILAGROS</td><td>F</td><td><a href="javascript:window.open('Fichas/CHUMPITAZCHUMPITAZ.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>AVALOS </td><td>ORMACHEA</td><td>NICOL VALENTINA</td><td>F</td><td><a href="javascript:window.open('Fichas/AVALOSORMACHEA.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>FRANCIA </td><td>VIDAL</td><td>EVANS EDUARDO</td><td>M</td><td><a href="javascript:window.open('Fichas/FRANCIAVIDAL.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>RAMOS </td><td>QUISPE</td><td>MILETH IRHE</td><td>F</td><td><a href="javascript:window.open('Fichas/RAMOSQUISPE.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>DAVILA</td><td>ZAVALA</td><td>MATEO DAVID</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>ABURTO</td><td>OBANDO</td><td>JUAN MATIAS</td><td>M</td><td><a href="javascript:window.open('Fichas/ABURTOOBANDO.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>RUIZ </td><td>CASTEL </td><td>ADRIANO MATHIAS</td><td>M</td><td><a href="javascript:window.open('Fichas/RUIZCASTEL.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>ARIAS </td><td>AVALOS </td><td>MASSIEL STEFANY</td><td>F</td><td><a href="javascript:window.open('Fichas/ARIASAVALOS2.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>GONZALES</td><td>ABURTO</td><td>MARIO MARCELO</td><td>M</td><td><a href="javascript:window.open('Fichas/GONZALESABURTO.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>ARQUIÑEVA</td><td>AVALOS </td><td>MARIA PAZ ABIGAIL</td><td>F</td><td><a href="javascript:window.open('Fichas/ARQUIÑEVAAVALOS.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>REYES </td><td>ARIAS </td><td>AITANA VICTORIA</td><td>F</td><td><a href="javascript:window.open('Fichas/REYESARIAS.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>VILLALOBOS</td><td>VILLALOBOS</td><td>SARASWATI DEVI</td><td>F</td><td><a href="javascript:window.open('Fichas/VILLALOBOSVILLALOBOS.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>CANCHARI </td><td>RAMOS </td><td>AKEMI KAORI</td><td>F</td><td><a href="javascript:window.open('Fichas/CANCHARIRAMOS.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>PISFIL </td><td>FLORES</td><td>CARLOS ISRAEL</td><td>M</td><td><a href="javascript:window.open('Fichas/PISFILFLORES.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>CHUMPITAZ</td><td>OLORTEGUI</td><td>JULIO JOAQUIN</td><td>M</td><td><a href="javascript:window.open('Fichas/CHUMPITAZOLORTEGUI.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>ALCANTARA</td><td>CHUMPITAZ</td><td>BENJAMIN</td><td>M</td><td><a href="javascript:window.open('Fichas/ALCANTARACHUMPITAZ.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>ARIAS </td><td>CONDORI</td><td>MIRTHA SOFIA</td><td>F</td><td><a href="javascript:window.open('Fichas/ARIASCONDORI.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>ARIAS</td><td>VILLALOBOS</td><td>DAYRON FROILER</td><td>M</td><td><a href="javascript:window.open('Fichas/ARIASVILLALOBOS2.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>CAMPOS</td><td>ANCCO</td><td>IKER ADHEMIR</td><td>M</td><td><a href="javascript:window.open('Fichas/IKERADHEMIR.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>RUBIANO</td><td>ABURTO</td><td>LIAN</td><td>M</td><td><a href="javascript:window.open('Fichas/LIANRUBIANO.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>ESCALANTE</td><td>VERAMENDE</td><td>PRICILLA NAOMI</td><td>F</td><td><a href="javascript:window.open('Fichas/ESCALANTEVERAMENDE.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>NARRO</td><td>ARIAS</td><td>DAILA</td><td>F</td><td><a href="javascript:window.open('Fichas/NARROARIAS.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º A</td><td>NARRO</td><td>ARIAS</td><td>ZAIRA</td><td>F</td><td><a href="javascript:window.open('Fichas/NARROARIAS2.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º B</td><td>ABAD </td><td>JIMENEZ</td><td>YHOSTIN JAHIR</td><td>M</td><td><a href="javascript:window.open('Fichas/ABADJIMENEZ.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º B</td><td>ARANA </td><td>TORRES</td><td>VICTOR FELIX</td><td>M</td><td><a href="javascript:window.open('Fichas/ARANATORRES.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º B</td><td>BENAVENTE </td><td>SANTOS</td><td>ROSARIO KORINA</td><td>F</td><td><a href="javascript:window.open('Fichas/BENAVENTESANTOS.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º B</td><td>BRAVO</td><td>RAMOS</td><td>ASTRID ARLYN</td><td>F</td><td><a href="javascript:window.open('Fichas/BRAVORAMOS.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º B</td><td>CUAREZ</td><td>CASTRO</td><td>VALERIA</td><td>F</td><td><a href="javascript:window.open('Fichas/CUAREZCASTRO.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º B</td><td>ESCALONA </td><td>MARRERO</td><td>CESAR SAID</td><td>M</td><td><a href="javascript:window.open('Fichas/ESCALONAMARRERO.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º B</td><td>HERNANDEZ</td><td>MAURICIO</td><td>GIA VALENTINA</td><td>F</td><td><a href="javascript:window.open('Fichas/HERNANDEZMAURICIO.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º B</td><td>HILARES </td><td>POMES</td><td>DANUSKA ESPERANZA</td><td>F</td><td><a href="javascript:window.open('Fichas/HILARESPOMES.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º B</td><td>LEON </td><td>CHUMPITAZ</td><td>BRIANA</td><td>F</td><td><a href="javascript:window.open('Fichas/LEONCHUMPITAZ.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º B</td><td>MALASQUEZ </td><td>CARRILLO</td><td>ARIANA</td><td>F</td><td><a href="javascript:window.open('Fichas/MALASQUEZCARRILLO.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º B</td><td>MALASQUEZ</td><td>ROSAS</td><td>AKEMI</td><td>F</td><td><a href="javascript:window.open('Fichas/MALASQUEZROSAS.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º B</td><td>MENDOZA</td><td>S.</td><td>MIA ALESSANDRA</td><td>F</td><td><a href="javascript:window.open('Fichas/MENDOZAS.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º B</td><td>ORE </td><td>JANAMPA</td><td>ANA MARIA</td><td>F</td><td><a href="javascript:window.open('Fichas/OREJANAMPA.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º B</td><td>PEREZ</td><td>CARMEN</td><td>FERNANDA</td><td>F</td><td><a href="javascript:window.open('Fichas/PEREZCARMEN.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º B</td><td>PIZANGO</td><td>FLORES</td><td>RANDY</td><td>M</td><td><a href="javascript:window.open('Fichas/PIZANGOFLORES2.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>4º B</td><td>SANCHEZ</td><td>CAMPOS</td><td>THIAGO IMANOL</td><td>M</td><td><a href="javascript:window.open('Fichas/SANCHEZCAMPOS.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º </td><td>ABARCA</td><td>PULACHE</td><td>FRANCISCO MOISES</td><td>M</td><td><a href="javascript:window.open('Fichas/MOYACASTILLO.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º </td><td>ABURTO  </td><td>PEREZ</td><td>NARDA VALENTINA</td><td>F</td><td><a href="javascript:window.open('Fichas/MUÑOZPIHUAY.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º </td><td>ABURTO</td><td>ZAMUDIO</td><td>ANA THALIA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º </td><td>ACUÑA</td><td>GARCIA</td><td>VANIA NICOLE</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º </td><td>ARIAS</td><td>RAMOS</td><td>JUAN VICTOR</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º </td><td>AVALOS</td><td>CHUMPITAZ</td><td>ZOE THAIS</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º </td><td>AVALOS</td><td>HERRERA</td><td>THIAGO JEAN PIERO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º </td><td>CAMPOS </td><td>QUISPE</td><td>RAFAELA ALEJANDRA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º </td><td>CHOMBILE</td><td>ACUÑA</td><td>YANIRA BELEN</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º</td><td>CHUMPITAZ </td><td>BALTAZAR</td><td>NORMA KIARA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º</td><td>FLORES</td><td>SAAVEDRA</td><td>DANICA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º</td><td>GARCIA</td><td>FERNANDEZ</td><td>ROSA FERNANDA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º</td><td>GUERRERO</td><td>ACUÑA</td><td>LEO IAN LUCK</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º</td><td>HERNANDEZ</td><td>BANDES</td><td>WILLIAMS SANTIAGO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º</td><td>HERNANDEZ</td><td>VALERIANO</td><td>NAYIRO ALVARO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º</td><td>MALASQUEZ </td><td>CHUMPITAZ</td><td>ROXETTE FEY</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º</td><td>MALASQUEZ</td><td>LOZANO</td><td>ANAHI LIZBETH</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º</td><td>MALASQUEZ</td><td>VILLALOBOS</td><td>KAZUMI KAORI</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º</td><td>MANCO</td><td>FRANCIA </td><td>KAIRA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º</td><td>PIGUAY</td><td>VASQUEZ</td><td>LUIS GERRAD</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º</td><td>RAMOS </td><td>CAMPOS </td><td>XIARA ARELIZ</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º</td><td>SILOPU</td><td>ARCOS</td><td>FREDY ENRIQUE</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º</td><td>TACILLA </td><td>QUISPE</td><td>EMILY ROSAURA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º</td><td>VILLALOBOS </td><td>ABURTO</td><td>BELEN PALMIRA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º</td><td>VILLALOBOS</td><td>ABURTO</td><td>FABIANNE INES</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º</td><td>VILLALOBOS</td><td>ARIAS</td><td>DANAY YAMILE</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º</td><td>VILLALOBOS</td><td>QUISPE</td><td>LUIS MARTIN</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>5º</td><td>ZAMUDIO</td><td>AVALOS</td><td>MARIA FERNANDA     </td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º A</td><td>ABURTO</td><td>ZAVALA</td><td>NAIARA MAITE</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º A</td><td>ARIAS</td><td>QUEVEDO</td><td>NIURKA ISABEL</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º A</td><td>AVALOS </td><td>BUSTINCIO</td><td>KEITH ESMITH</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º A</td><td>AVALOS</td><td>MALASQUEZ</td><td>KURT AARON</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º A</td><td>BENAVENTE </td><td>CHUMPITAZ</td><td>XIOMARA KAIPIRIÑA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º A</td><td>BOLIVAR</td><td>LOAIZA</td><td>VALERI SAMANTHA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º A</td><td>CAMPOS</td><td>BRAVO </td><td>BRIAN JOSUA</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º A</td><td>CAMPOS</td><td>QUISPE</td><td>SEBASTIAN ALONSO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º A</td><td>CASILLA </td><td>ARCOS</td><td>KAORY KATSUMY</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º A</td><td>CHUMPITAZ </td><td>ARIAS</td><td>TOMMY ROMARIO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º A</td><td>FERREYRA </td><td>MORI</td><td>ALEXANDRO MILKO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º A</td><td>FLORES</td><td>SAAVEDRA</td><td>FABIANA YACET</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º A</td><td>GONZALES  </td><td>SALINAS </td><td>LEONARDO VALENTINO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º A</td><td>GUTIERREZ </td><td>SINCHI</td><td>ORLANDO JAN POL</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º A</td><td>MESA</td><td>CHUMPITAZ</td><td>DAYANA BEATRIZ</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º A</td><td>PISANGO</td><td>FLORES</td><td>CELVIA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º A</td><td>QUISPE</td><td>FRANCIA</td><td>LUISA MARIA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º A</td><td>RODRIGUEZ </td><td>ABURTO</td><td>MARIA GUADALUPE</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º A</td><td>TENEMAS</td><td>VERA</td><td>RAFAELA THAIS</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º A</td><td>VICENTE</td><td>QUISPE</td><td>VIVIANA GUADALUPE</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º B</td><td>ABURTO </td><td>ABURTO</td><td>MARIA ESTHER</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º B</td><td>ACUÑA </td><td>QUISPE</td><td>ALICIA NICOLE</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º B</td><td>ALIAGA</td><td>SALAZAR</td><td>SAUL STEFANO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º B</td><td>ARIAS</td><td>LIMA</td><td>ALESSIA BRIANA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º B</td><td>ARIAS </td><td>SALINAS </td><td>KAHORI MARILENY</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º B</td><td>ARIAS </td><td>VILLALOBOS</td><td>JEAN POOL</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º B</td><td>AVALOS</td><td>ARIAS</td><td>JOSEMARIA</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º B</td><td>AVALOS</td><td>CHUMPITAZ</td><td>YAKIRA CHANTAL</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º B</td><td>AVALOS </td><td>PACHECO</td><td>OLENKA NAYELY</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º B</td><td>BENAVENTE</td><td>MALASQUEZ</td><td>ISSAC EDUARDO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º B</td><td>CANDELA</td><td>CAMPOS</td><td>KATHERINE GRISELL</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º B</td><td>CASTILLO</td><td>CAMPOS</td><td>ARELIS KARUMI</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º B</td><td>GARCIA</td><td>ARIAS</td><td>JIMENA ANTUANETH</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º B</td><td>HIPOLITO</td><td>ABURTO</td><td> ABIUD ENRIQUE</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º B</td><td>LARA</td><td>PAREDES</td><td>ROSA FERNANDA</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º B</td><td>MALASQUEZ</td><td>BARRIENTOS</td><td>NAYRA ELIZABETH</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º B</td><td>MENDIGUETE</td><td>ACUÑA</td><td>FRANCO NICOLAS</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º B</td><td>QUISPE</td><td>QUISPE</td><td>FELIX ALONSO</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º B</td><td>SAUCEDO</td><td>SILVA</td><td>LUZ MIREYDI ARACELY</td><td>F</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+  <tr><td>6º B</td><td>VILLALOBOS</td><td>ARIAS</td><td>OOSTIN JOSUE</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+ <tr><td>6º B</td><td>VILLALOBOS</td><td>QUISPE</td><td>MIGUEL ANGEL</td><td>M</td><td><a href="javascript:window.open('Fichas/pihuay.html','','width=300,height=350');">Ficha</td></tr>
+</tbody>
+ </table>
+</p>
+    </div> <!-- /container -->
+<script type="text/javascript">
+  
+function mostrar(){
+  swal('desea continuar');
+}
+
+
+</script>
+
+
+
+
+  </body>
+</html>
