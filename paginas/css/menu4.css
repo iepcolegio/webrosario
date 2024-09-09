@@ -1,0 +1,172 @@
+:root{
+	--estado-buda:0.3s;
+	--cada-item:28px;
+	--cantidad-items:2;
+}
+
+
+body{
+	display: flex;
+	min-height: 100vh;
+	margin: 0;
+	gap:30px;
+	font-family: Arial;
+	font-size: 16px;
+}
+header{
+	width: 200px;
+	background: #1E1E1E;
+
+}
+nav ul{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	line-height: 16px;
+
+}
+nav ul li{
+border-bottom: 1px solid  #1E1E1E;
+
+}
+nav ul a{
+	box-sizing: border-box;
+	color: white ;
+	display: block;
+	background:#121212 ;
+	width: 100%;
+	padding: 6px 10px;
+	text-decoration: none;
+
+}
+.primero li a{
+	text-align: center;
+}
+.primero li a:hover{
+	 background: #0074c7;
+}
+nav ul ul{
+	height: 0px;
+	overflow: hidden;
+	transition: var(--estado-buda);
+	counter-reset: items;
+}
+nav ul ul li{
+	counter-increment: items;
+}
+nav ul li:hover ul{
+	height: calc(var(--cantidad-items)*var(--cada-items));
+	background: rgb(2,0,36);
+	background: linear-gradient(90deg, rgba(2,0,36,1) 0% ,rgba(67,103,17,1)35%, rgba(0,212,255,1) 100%);
+}
+nav ul ul a{
+	background: transparent;
+	
+}
+
+H1,H2{
+	color: white;
+	font-size: 16px;
+	text-align: center;
+	margin-top: 50px;
+	margin-bottom: 50px;
+	
+}
+img{
+align-items:center;
+}
+.fraxm{
+	
+	position: relative;
+	
+	flex-direction: column;
+left: 10px;
+}
+
+iframe{
+	position: absolute;
+	left: 5%;
+	top: 5px;
+
+	}
+
+
+
+    .container{
+    	width: 100vw;
+        height: 100vh;
+    }
+
+    .color-select{
+    	width: 100vw;
+    	height: 50px;
+    	background-color: rgb(242,255,168);
+    	display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 30px;
+    }
+    .color-select div{
+    	background: rgb(6,147,207);
+    	width: 30px;
+    	height: 30px;
+    	border-radius: 50%;
+    	margin-right: 30px;
+    	cursor: pointer;
+    }
+
+   
+    iframe{
+    	background-color: white;
+    	width: 950px;
+    	min-height: 950px;
+    	position: relative;
+        left: -5px;
+        top: 33px;
+}
+
+ .estam>a:hover {
+background-color: #7D3C98;
+}
+#set{
+	width: 100%;
+	height: 20px;
+	text-align: center;
+	position: relative;
+	bottom: 70px;
+}
+
+nav>a{ 
+	padding: 10px;
+	margin: 5px;
+width: 18%;
+height: 100%;
+background-color: rgb(104, 104, 104);
+text-decoration: none;
+color: white;
+ }
+ .sex1{
+ 	border-radius: 12px;
+
+ }
+.sex1:hover{
+	background:#6699FF;
+}
+h3{
+	
+	position: relative;
+	bottom: 96px;
+	text-align:center; 
+	border:3px solid #999900;
+	border-radius: 5px;
+	background-color: #117864;
+	color: white;
+	font-size: 16px;
+	padding: 8px;
+}
+main{
+	position: relative;
+	bottom: 68px;
+}
+
+   
