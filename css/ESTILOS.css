@@ -387,3 +387,23 @@ animation-duration:14000ms;
       left:1100px;
       top:0px;
     }
+
+
+
+
+#frozen2{
+	
+	
+	bottom: 3250PX;
+	width: 720px;
+	min-height: 1000px;
+	
+
+}
+.frami{
+
+		
+		display: flex;
+		justify-content: center;
+	
+	}
