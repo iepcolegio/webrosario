@@ -391,7 +391,7 @@ animation-duration:14000ms;
 
 
 
-iframe{
+#frozen2{
 	
 	
 	bottom: 3250PX;
@@ -400,10 +400,31 @@ iframe{
 	
 
 }
-.frami{
+.move{
+	float: left;
+}
+p{
+	text-align: center;
+	size: 33px;
+
+	color: #5b2c6f;
+}
+.paler{
+	display: flex;
+	justify-content: center;
+	}
+	.frami{
 
 		
 		display: flex;
 		justify-content: center;
 	
+	}
+	img:hover{
+		transform: scale(1.1);
+	}
+	.orion{
+		display: flex;
+		justify-content: center;
+		top: 90px;
 	}
