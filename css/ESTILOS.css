@@ -435,7 +435,7 @@ iframe{
 	background-color: white;
     	width: 960px;
     	min-height: 2000px;
-    	position: relative;
+    	position: absolute;
         left: 260px;
         top: -620px;
 }
@@ -447,6 +447,7 @@ width: 960px;
         left: 260px;
         top: -620px;	
 }
+
 
 
 
