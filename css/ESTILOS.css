@@ -388,19 +388,8 @@ animation-duration:14000ms;
       top:0px;
     }
 
+  }
 
-
-
-#frozen2{
-	
-	
-	bottom: 3250PX;
-	width: 720px;
-	min-height: 1000px;
-	border: 3px solid blue;
-	
-
-}
 .move{
 	float: left;
 }
@@ -431,14 +420,7 @@ p{
 		justify-content: center;
 		top: 90px;
 	}
-iframe{
-	background-color: white;
-    	width: 960px;
-    	min-height: 2000px;
-    	position: absolute;
-        left: 260px;
-        top: -620px;
-}
+
 #frozen2{
 border: 5px solid blue;
 width: 960px;
@@ -447,6 +429,7 @@ width: 960px;
         left: 260px;
         top: -620px;	
 }
+
 
 
 
