@@ -421,7 +421,7 @@ p{
 		top: 90px;
 	}
 
-#frozen2{
+iframe{
 border: 5px solid blue;
 width: 960px;
     	min-height: 2000px;
@@ -429,6 +429,7 @@ width: 960px;
         left: 260px;
         top: -620px;	
 }
+
 
 
 
