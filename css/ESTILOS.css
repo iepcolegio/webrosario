@@ -420,7 +420,7 @@ p{
 		display: flex;
 		justify-content: center;
 		pocition:relative;
-		alig
+		
 	
 	}
 	img:hover{
@@ -434,6 +434,7 @@ p{
 iframe{
 	border: 3px solid blue;
 }
+
 
 
 
