@@ -439,6 +439,15 @@ iframe{
         left: 260px;
         top: -620px;
 }
+#frozen2{
+border: 5px solid blue;
+width: 960px;
+    	min-height: 2000px;
+    	position: relative;
+        left: 260px;
+        top: -620px;	
+}
+
 
 
 
