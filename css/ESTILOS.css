@@ -417,9 +417,9 @@ p{
 	.frami{
 
 		
-		display: flex;
-		justify-content: center;
-		pocition:relative;
+		with:700px;
+		 margin-left: auto;
+                  margin-right: auto;
 		
 	
 	}
@@ -434,6 +434,7 @@ p{
 iframe{
 	border: 3px solid blue;
 }
+
 
 
 
