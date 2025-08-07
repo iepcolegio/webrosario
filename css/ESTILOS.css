@@ -421,14 +421,36 @@ p{
 		top: 90px;
 	}
 
-iframe{
-border: 5px solid blue;
-width: 960px;
-    	min-height: 2000px;
-    	position: absolute;
-        left: 260px;
-        top: -620px;	
+#frozen2{
+	
+	
+	bottom: 3250PX;
+	width: 720px;
+	min-height: 1000px;
+	
+
 }
+.move{
+	float: left;
+}
+p{
+	text-align: center;
+	size: 33px;
+
+	color: #5b2c6f;
+}
+.paler{
+	display: flex;
+	justify-content: center;
+	}
+	.frami{
+
+		
+		display: flex;
+		justify-content: center;
+	
+	}
+
 
 
 
