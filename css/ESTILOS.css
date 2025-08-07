@@ -453,6 +453,76 @@ p{
 
 
 
+.tomate{
+   display: flex;
+   justify-content: center;
+	 }
+    h4{
+    	padding: 15px 30px;
+      background-color: #007BFF;
+      color: white;
+      width: 250px;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: background-color 0.3s;
+    }
+    h4:hover {
+      background-color: #0056b3;
+    }
+   .opter{
+	width: 200px;
+	background: #1E1E1E;
+	position: relative;
+	left: 110px;
+	top: 70px;
+
+}
+.primero{
+	margin: 0;
+	padding: 5px;
+	list-style: none;
+	line-height: 16px;
+
+}
+.primero .pava{
+border-bottom: 1px solid  #3043bf;
+}
+.primero .orale{
+	box-sizing: border-box;
+	color: white ;
+	display: block;
+	background:#121212 ;
+	width: 100%;
+	padding: 6px 10px;
+	text-decoration: none;
+	list-style: none
+
+}
+.primero .pava  .orale{
+	text-align: center;
+}
+
+.primero .pava .orale:hover{
+	 background: #0074c7;
+}
+
+iframe{
+	background-color: white;
+    	width: 960px;
+    	min-height: 2000px;
+    	position: relative;
+        left: 410px;
+        top: -620px;
+}
+
+
+
+
 
 
 
