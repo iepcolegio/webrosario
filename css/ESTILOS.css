@@ -420,7 +420,7 @@ p{
 	}
 
 #frozen2{
-	top:170px;
+	top:130px;
 	width: 750px;
 	min-height: 170px;
 	border: 5px solid green;
@@ -507,6 +507,7 @@ iframe{
         left: 410px;
         top: -620px;
 }
+
 
 
 
