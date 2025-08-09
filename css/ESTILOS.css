@@ -406,7 +406,7 @@ p{
 	.frami{
 
 		
-		with:700px;
+		with:480px;
 		 margin-left: auto;
                   margin-right: auto;
 		border:5px solid green;
@@ -428,6 +428,9 @@ p{
 	bottom: 3250PX;
 	width: 720px;
 	min-height: 170px;
+	position: relative;
+	top:500px;
+	
 	
 
 }
@@ -520,6 +523,7 @@ iframe{
         left: 410px;
         top: -620px;
 }
+
 
 
 
