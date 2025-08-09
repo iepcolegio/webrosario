@@ -443,15 +443,6 @@ p{
 	display: flex;
 	justify-content: center;
 	}
-	.frami{
-
-		
-		display: flex;
-		justify-content: center;
-	
-	}
-
-
 
 .tomate{
    display: flex;
@@ -519,6 +510,7 @@ iframe{
         left: 410px;
         top: -620px;
 }
+
 
 
 
