@@ -425,7 +425,6 @@ p{
 	top:80px;
 	width: 750px;
 	min-height: 170px;
-	position: relative;
 	border: 5px solid green;
 	
 	
@@ -510,6 +509,7 @@ iframe{
         left: 410px;
         top: -620px;
 }
+
 
 
 
