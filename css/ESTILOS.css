@@ -426,13 +426,10 @@ p{
 	
 	
 	bottom: 3250PX;
-	width: 720px;
+	width: 480px;
 	min-height: 170px;
 	position: relative;
-	top:500px;
 	
-	
-
 }
 .move{
 	float: left;
@@ -523,6 +520,7 @@ iframe{
         left: 410px;
         top: -620px;
 }
+
 
 
 
