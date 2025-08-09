@@ -422,7 +422,7 @@ p{
 #frozen2{
 	
 	
-	
+	top:300px;
 	width: 750px;
 	min-height: 170px;
 	position: relative;
@@ -519,6 +519,7 @@ iframe{
         left: 410px;
         top: -620px;
 }
+
 
 
 
