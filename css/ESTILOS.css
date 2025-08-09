@@ -390,9 +390,7 @@ animation-duration:14000ms;
 
   }
 
-.move{
-	float: left;
-}
+
 p{
 	text-align: center;
 	size: 33px;
@@ -407,8 +405,7 @@ p{
 
 		
 		with:480px;
-		 margin-left: auto;
-                  margin-right: auto;
+	
 		border:5px solid green;
 		
 	
@@ -426,9 +423,9 @@ p{
 	
 	
 	bottom: 2800PX;
-	width: 480px;
+	width: 750px;
 	min-height: 170px;
-	position: relative;
+	position: absolute;
 	
 }
 .move{
@@ -520,6 +517,7 @@ iframe{
         left: 410px;
         top: -620px;
 }
+
 
 
 
