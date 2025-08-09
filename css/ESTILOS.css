@@ -405,7 +405,7 @@ p{
 
 		
 		with:480px;
-	
+	  height: 70px;
 		border:5px solid green;
 		
 	
@@ -517,6 +517,7 @@ iframe{
         left: 410px;
         top: -620px;
 }
+
 
 
 
