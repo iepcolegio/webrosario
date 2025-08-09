@@ -406,7 +406,7 @@ p{
 		
 		with:780px;
 	  height: 180px;
-		border:5px solid green;
+		
 		
 	
 	}
@@ -423,9 +423,6 @@ p{
 	top:10px;
 	width: 750px;
 	min-height: 170px;
-	border: 5px solid red;
-	
-	
 }
 .move{
 	float: left;
@@ -507,6 +504,7 @@ iframe{
         left: 410px;
         top: -620px;
 }
+
 
 
 
