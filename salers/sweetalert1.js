@@ -2,10 +2,10 @@
 
 
 Swal.fire({
-	title:'HORARIO DE ATENCION A PADRES DE FAMILIA',
+	title:'REGRESO A CLASES',
 confirmButtonText:'CERRAR',
 with: '100%',
-imageUrl:'regreso.jpg',
+imageUrl:'regreso.jpeg',
 width : '700 %',
 padding:0,
 backdrop:'true',
@@ -15,4 +15,5 @@ allowEnterkey:true,
 stopkeydownPropagation:false,
 }
 	);
+
 
