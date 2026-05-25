@@ -93,7 +93,6 @@
         background: #00c499;
     }
 
-    /* Estilo especial para el botón de eliminación masiva en el menú principal */
     .boton-eliminar-mes {
         background: #dc3545;
         color: white;
@@ -120,6 +119,32 @@
     .seccion-asistencia h2 {
         text-align: center;
         margin-top: 10px;
+    }
+
+    /* Estilo del selector de fecha dentro de la asistencia */
+    .caja-fecha-registro {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .caja-fecha-registro label {
+        font-weight: bold;
+        font-size: 16px;
+        color: #1e3c72;
+    }
+
+    .caja-fecha-registro input {
+        padding: 8px;
+        font-size: 16px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-weight: bold;
     }
 
     .card {
@@ -178,9 +203,6 @@
 
 <body>
 
-<!-- =================================================== -->
-<!-- PANTALLA 1: PORTAL ESCOLAR (MENÚ PRINCIPAL)        -->
-<!-- =================================================== -->
 <div id="pantalla-menu" class="contenedor-menu">
     <img src="insignia3.jpg" width="100px" height="140px" onerror="this.src='insignia.jpg'">
     <h1>Asistencia de Secundaria</h1>
@@ -210,14 +232,10 @@
         
         <button class="boton-grado boton-consolidado" onclick="abrirConsolidadoWeb()">📊 Consolidado General</button>
         
-        <!-- ¡NUEVO BOTÓN DE ELIMINACIÓN TOTAL MENSUAL! -->
         <button class="boton-grado boton-eliminar-mes" onclick="eliminarMesCompleto()">🗑️ Eliminar Datos del Mes</button>
     </div>
 </div>
 
-<!-- =================================================== -->
-<!-- PANTALLA 2: INTERFAZ DE REGISTRO DE ASISTENCIA     -->
-<!-- =================================================== -->
 <div id="pantalla-asistencia" class="seccion-asistencia">
     
     <button class="btn-action volver" onclick="volverAlMenu()">⬅ Volver al Menú</button>
@@ -228,6 +246,11 @@
 
     <h2 id="titulo-grado">📚 Asistencia Escolar</h2>
 
+    <div class="caja-fecha-registro">
+        <label for="fecha-asistencia">📆 Fecha del Registro:</label>
+        <input type="text" id="fecha-asistencia" placeholder="Ej: 11/05" onchange="cargarAsistenciaPorFecha()">
+    </div>
+
     <div id="lista"></div>
 
     <div class="botones-asistencia">
@@ -235,7 +258,7 @@
             💾 Guardar Asistencia
         </button>
         <button class="btn-action nueva" onclick="nuevaAsistencia()">
-            ➕ Nueva Asistencia
+            ➕ Nueva Asistencia (Reiniciar Lista)
         </button>
         <button class="btn-action exportar" onclick="exportarVistaWeb()">
             📊 Ver Reporte / Imprimir
@@ -265,105 +288,10 @@ const baseAlumnos = {
         "PIZANGO FLORES SELVIA", "RAMOS CAMPOS XIARA", "SILOPU ARCOS FREDY", "SILVA MONTILLA YOSGUER",
         "VILLALOBOS QUISPE LUIS", "VILLALOBOS CAMACHO JEAN CARLOS", "ZAMUDIO AVALOS MARIA", "SALAZAR NEYRA JAIRO"
     ],
-    "2° SECUNDARIA": ["ABURTO ZAVALA NAIRA MAITE",
-    "ACUÑA QUISPE ALICIA NICOLE",
-    "AGUILAR NEYRA ESTEFANI ABIGAIL",
-    "ARCOS EGUSQUIZA LEONARDO EZEQUIEL",
-    "ARIAS LIMA ALESSIA BRIANA",
-    "ARIAS SALINAS KAHORI MARILENY",
-    "ARIAS VILLALOBOS JEAN POOL",
-    "AVALOS ARIAS JOSE MARIA",
-    "BENAVENTE MALASQUEZ ISAAC EDUARDO",
-    "CANDELA CASTILLO ESTEBAN",
-    "CANDELA PEREZ JASUE",
-    "CASILLA ARCOS KAORY KATSUMY",
-    "CHUMPITAZ ROSAS VALESKA ELIZABETH",
-    "DIAZ ARIAS ANGELI",
-    "GARCIA ARIAS JIMENA ANTUANETH",
-    "FLORES SAAVEDRA FABIANA YACET",
-    "LARA PAREDES ROSA FERNANDA",
-    "MENDIGUETE ACUÑA FRANCO NICOLAS",
-    "MEZA CHUMPITAZ DAYANA BEATRIZ",
-    "QUISPE FRANCIA LUISA MARIA",
-    "RODRIGUEZ ABURTO MARIA GUADALUPE",
-    "VILLALOBOS ARIAS OSSTIN JOSUE",
-    "VILLALOBOS QUISPE MIGUEL ANGEL",
-     "ZAPATA HERRERA BYRON",
-    "CHAVEZ FLORES DARLYN",
-    "SALAZAR NEIRA ANI",
-    "ESPINO MENDOZA NAHUM JHOKADY"],
-    "3° SECUNDARIA": ["ALLANTA QUIROZ THAMARA LUCIA",
-    "AVALOS MALDONADO TILSA MARIA",
-    "ARIAS ORBE SARAI KARUMI",
-    "AVALOS VASQUEZ JUAN JOSÉ",
-    "CAMPOS MERCADO KATHERINE NICOL",
-    "CARBAJAL RIVERA EDGAR GEORGE GABRIEL",
-    "CASTELL TENEMAS NAYLIN YAMIL",
-    "CHOZ CISNEROS JUAN ANDRES",
-    "CHUMPITAZ CERRON HARUMI XIOMARA",
-    "DAVILA VARGAS JHELEN NAOMI",
-    "ESQUEN MEJIA DARREL ANDRE",
-    "FRANCIA HERNANDEZ EDISON JOSEMARIA",
-    "GARCIA MALASQUEZ TAYRA ANGELY",
-    "LEON CHUMPITAZ DYLAN MANUEL ANDRES",
-    "MALASQUEZ ABURTO JHEFREE GONZALO",
-    "PIGUAY DOMINGUEZ MARIA DE LOS ANGELES",
-    "RAMOS ANGULO KRIZIA ZAGHENY MARCELA",
-    "RENGIFO QUISPE MONICA KAORI",
-     "SANCHEZ CAMPOS DREY ABDUL",
-    "SUAREZ SANCHEZ BRUCE WILLIANS",
-    "VILLALOBOS CAMACHO GUADALUPE",
-    "VILLALOBOS SAIRE SITA TAKURANI",
-    "VILLALOBOS VILLALOBOS PARVATI DEVI"],
-    "4° SECUNDARIA": ["ABURTO GUZMAN LUHANA KAHORY",
-    "ARIAS ACUÑA JOSIANA MARIA V.",
-    "ARIAS QUISPE JOSE GONZALO",
-    "ARIAS RAMOS ROBERTO FRANCISCO",
-    "ARQUIÑEVA AVALOS MELANY REBECA",
-    "AVALOS SANCHEZ MARIA ELITIA NAOMI",
-    "CASTAÑEDA HUAPAYA LUANA GAHELA",
-    "CRISPIN QUISPE ANDRELY SOLEDAD",
-    "CHUMPITAZ ROJAS MARIA ALMENDRA",
-    "CHUMPITAZ ROSAS AIMEE MARLENE",
-    "GARCIA MARCA BLENI YUZELI",
-    "GARCIA ORE THIAGO MATEO",
-    "GARCIA VILLALOBOS NISHINJA DEVA",
-    "MEZA QUISPE GENESIS ROSSMERY",
-    "MOYA CASTILLO ANDREA ALEXANDRA",
-    "NARRO ARIAS GREACE DAYANNA",
-    "RAMOS AVALOS YERIK ANYELO YAMIL",
-    "TASAYCO ROJAS ALVARO YHAJAIRO",
-    "TOMAS PULIDO ALLISON TATIANA"],
-    "5° SECUNDARIA": ["ABURTO PEREZ YASMIN GABRIELA",
-    "ALIAGA MANIHUARI LEONARDO DAVID",
-    "ANGELES CHUMPITAZ CHERLIT FIORELLA",
-    "ARANA VILCA MARIA PALOMA",
-    "ARIAS CAMPOS FABIAN ALEXANDER",
-    "ARIAS LIMA AXEL FRANCISCO",
-    "ARIAS VILLALOBOS YASURI",
-    "AVALOS AVALOS LUHANA BELEN",
-    "AVALOS QUISPE VICTOR ALONSO SAMIR",
-    "CAMPOS AQUINO ABIGAIL GUADALUPE",
-    "CAMPOS BARTOLO DANY DANIEL",
-    "CAMPOS NAPAN LUZ ANDREA",
-    "CAMPOS SOLER KATSUMI SAHORI",
-    "CAMPOS YAYA DENNISES YOELI",
-    "CANDELA CHAVEZ STEPHANO DENILSON",
-    "CANDELA PACHECO DAYANA ANTUANET",
-    "CASTILLO CAMPOS ROSA RUBI RINA",
-    "DAVILA ZAVALA CELESTE ADRIANA",
-     "GARCIA MALASQUEZ ALESSIA ISABEL",
-    "GARCIA MALASQUEZ FERGIE ESMERALDA",
-    "GARCIA VILLALOBOS VRNDA DEVI",
-    "PAZ BERRU NEYSER YOEL",
-    "PELAEZ AVALOS MARJORIE ESPERANZA",
-    "QUIQUIA VASQUEZ YASUMI XIOMARA",
-    "RODRIGUEZ ANGULO JIORDANA R.",
-     "ROJAS MEDINA ARIADNA IVANA",
-    "SANCHEZ ROSAS JUAN PABLO",
-    "SILOPU ARCOS MARIA DEL CARMEN",
-    "SUAREZ ARCOS AYTANA MARIA M.",
-    "SUAREZ SANCHEZ DEYVID DAVID"]
+    "2° SECUNDARIA": ["ABURTO ZAVALA NAIRA MAITE", "ACUÑA QUISPE ALICIA NICOLE", "AGUILAR NEYRA ESTEFANI ABIGAIL", "ARCOS EGUSQUIZA LEONARDO EZEQUIEL", "ARIAS LIMA ALESSIA BRIANA", "ARIAS SALINAS KAHORI MARILENY", "ARIAS VILLALOBOS JEAN POOL", "AVALOS ARIAS JOSE MARIA", "BENAVENTE MALASQUEZ ISAAC EDUARDO", "CANDELA CASTILLO ESTEBAN", "CANDELA PEREZ JASUE", "CASILLA ARCOS KAORY KATSUMY", "CHUMPITAZ ROSAS VALESKA ELIZABETH", "DIAZ ARIAS ANGELI", "GARCIA ARIAS JIMENA ANTUANETH", "FLORES SAAVEDRA FABIANA YACET", "LARA PAREDES ROSA FERNANDA", "MENDIGUETE ACUÑA FRANCO NICOLAS", "MEZA CHUMPITAZ DAYANA BEATRIZ", "QUISPE FRANCIA LUISA MARIA", "RODRIGUEZ ABURTO MARIA GUADALUPE", "VILLALOBOS ARIAS OSSTIN JOSUE", "VILLALOBOS QUISPE MIGUEL ANGEL", "ZAPATA HERRERA BYRON", "CHAVEZ FLORES DARLYN", "SALAZAR NEIRA ANI", "ESPINO MENDOZA NAHUM JHOKADY"],
+    "3° SECUNDARIA": ["ALLANTA QUIROZ THAMARA LUCIA", "AVALOS MALDONADO TILSA MARIA", "ARIAS ORBE SARAI KARUMI", "AVALOS VASQUEZ JUAN JOSÉ", "CAMPOS MERCADO KATHERINE NICOL", "CARBAJAL RIVERA EDGAR GEORGE GABRIEL", "CASTELL TENEMAS NAYLIN YAMIL", "CHOZ CISNEROS JUAN ANDRES", "CHUMPITAZ CERRON HARUMI XIOMARA", "DAVILA VARGAS JHELEN NAOMI", "ESQUEN MEJIA DARREL ANDRE", "FRANCIA HERNANDEZ EDISON JOSEMARIA", "GARCIA MALASQUEZ TAYRA ANGELY", "LEON CHUMPITAZ DYLAN MANUEL ANDRES", "MALASQUEZ ABURTO JHEFREE GONZALO", "PIGUAY DOMINGUEZ MARIA DE LOS ANGELES", "RAMOS ANGULO KRIZIA ZAGHENY MARCELA", "RENGIFO QUISPE MONICA KAORI", "SANCHEZ CAMPOS DREY ABDUL", "SUAREZ SANCHEZ BRUCE WILLIANS", "VILLALOBOS CAMACHO GUADALUPE", "VILLALOBOS SAIRE SITA TAKURANI", "VILLALOBOS VILLALOBOS PARVATI DEVI"],
+    "4° SECUNDARIA": ["ABURTO GUZMAN LUHANA KAHORY", "ARIAS ACUÑA JOSIANA MARIA V.", "ARIAS QUISPE JOSE GONZALO", "ARIAS RAMOS ROBERTO FRANCISCO", "ARQUIÑEVA AVALOS MELANY REBECA", "AVALOS SANCHEZ MARIA ELITIA NAOMI", "CASTAÑEDA HUAPAYA LUANA GAHELA", "CRISPIN QUISPE ANDRELY SOLEDAD", "CHUMPITAZ ROJAS MARIA ALMENDRA", "CHUMPITAZ ROSAS AIMEE MARLENE", "GARCIA MARCA BLENI YUZELI", "GARCIA ORE THIAGO MATEO", "GARCIA VILLALOBOS NISHINJA DEVA", "MEZA QUISPE GENESIS ROSSMERY", "MOYA CASTILLO ANDREA ALEXANDRA", "NARRO ARIAS GREACE DAYANNA", "RAMOS AVALOS YERIK ANYELO YAMIL", "TASAYCO ROJAS ALVARO YHAJAIRO", "TOMAS PULIDO ALLISON TATIANA"],
+    "5° SECUNDARIA": ["ABURTO PEREZ YASMIN GABRIELA", "ALIAGA MANIHUARI LEONARDO DAVID", "ANGELES CHUMPITAZ CHERLIT FIORELLA", "ARANA VILCA MARIA PALOMA", "ARIAS CAMPOS FABIAN ALEXANDER", "ARIAS LIMA AXEL FRANCISCO", "ARIAS VILLALOBOS YASURI", "AVALOS AVALOS LUHANA BELEN", "AVALOS QUISPE VICTOR ALONSO SAMIR", "CAMPOS AQUINO ABIGAIL GUADALUPE", "CAMPOS BARTOLO DANY DANIEL", "CAMPOS NAPAN LUZ ANDREA", "CAMPOS SOLER KATSUMI SAHORI", "CAMPOS YAYA DENNISES YOELI", "CANDELA CHAVEZ STEPHANO DENILSON", "CANDELA PACHECO DAYANA ANTUANET", "CASTILLO CAMPOS ROSA RUBI RINA", "DAVILA ZAVALA CELESTE ADRIANA", "GARCIA MALASQUEZ ALESSIA ISABEL", "GARCIA MALASQUEZ FERGIE ESMERALDA", "GARCIA VILLALOBOS VRNDA DEVI", "PAZ BERRU NEYSER YOEL", "PELAEZ AVALOS MARJORIE ESPERANZA", "QUIQUIA VASQUEZ YASUMI XIOMARA", "RODRIGUEZ ANGULO JIORDANA R.", "ROJAS MEDINA ARIADNA IVANA", "SANCHEZ ROSAS JUAN PABLO", "SILOPU ARCOS MARIA DEL CARMEN", "SUAREZ ARCOS AYTANA MARIA M.", "SUAREZ SANCHEZ DEYVID DAVID"]
 };
 
 const listaGrados = ["1° SECUNDARIA", "2° SECUNDARIA", "3° SECUNDARIA", "4° SECUNDARIA", "5° SECUNDARIA"];
@@ -381,7 +309,13 @@ function abrirAsistencia(grado) {
     
     document.getElementById("titulo-grado").innerText = `📚 Asistencia Escolar - ${grado} (${mesActual})`;
     
+    // Dejar el input de fecha vacío o poner una ayuda visual
+    document.getElementById("fecha-asistencia").value = "";
+    
+    // Traer el historial completo de LocalStorage
     historial = JSON.parse(localStorage.getItem(`historial_${gradoActual}_${mesActual}`)) || [];
+    
+    // Generar la lista inicial (estará en blanco o por defecto en 'A')
     generarListaAlumnos();
 }
 
@@ -400,32 +334,53 @@ function generarListaAlumnos() {
         return;
     }
 
+    // Averiguar qué fecha está puesta en el input de texto
+    const fechaSeleccionada = document.getElementById("fecha-asistencia").value.trim();
+    
+    // Buscar si ya se guardó asistencia para esta fecha específica anteriormente
+    let registroExistente = historial.find(r => r.fecha === fechaSeleccionada);
+
     alumnos.forEach((alumno, index) => {
+        // Por defecto todos asistieron ('A')
+        let estadoGuardado = "A"; 
+        
+        // Pero si existía un registro guardado para este día, tomamos ese valor histórico
+        if (registroExistente && registroExistente.datos && registroExistente.datos[alumno]) {
+            estadoGuardado = registroExistente.datos[alumno];
+        }
+
         const card = document.createElement("div");
         card.className = "card";
         card.innerHTML = `
             <div class="nombre">${index + 1}. ${alumno}</div>
             <select id="estado-${index}">
-                <option value="A">✅ Asistió</option>
-                <option value="F">❌ Faltó</option>
-                <option value="T">⏰ Tarde</option>
+                <option value="A" ${estadoGuardado === 'A' ? 'selected' : ''}>✅ Asistió</option>
+                <option value="F" ${estadoGuardado === 'F' ? 'selected' : ''}>❌ Faltó</option>
+                <option value="T" ${estadoGuardado === 'T' ? 'selected' : ''}>⏰ Tarde</option>
             </select>
         `;
         lista.appendChild(card);
     });
 }
 
-function guardarAsistencia() {
-    let fecha = prompt(`Ingrese fecha para el mes de ${mesActual} (ej: 11/05)`);
-    if (!fecha) return;
+// Esta función se ejecuta sola cuando escribes o cambias la fecha en el recuadro
+function cargarAsistenciaPorFecha() {
+    generarListaAlumnos();
+}
 
-    if (historial.some(r => r.fecha === fecha)) {
-        alert("Esa fecha ya existe en este mes.");
+function guardarAsistencia() {
+    let fecha = document.getElementById("fecha-asistencia").value.trim();
+    
+    if (!fecha) {
+        alert("Por favor, ingrese una fecha válida en el recuadro de arriba (ej: 11/05) antes de guardar.");
         return;
     }
 
+    // Buscamos si la fecha ya existía en el historial para actualizarla en vez de duplicarla
+    let indiceExistente = historial.findIndex(r => r.fecha === fecha);
+
     let asistencia = {
-        fecha,
+        fecha: fecha,
         datos: {}
     };
 
@@ -434,9 +389,17 @@ function guardarAsistencia() {
         asistencia.datos[alumno] = document.getElementById(`estado-${i}`).value;
     });
 
-    historial.push(asistencia);
+    if (indiceExistente !== -1) {
+        // Si ya existía el día, sobreescribimos los datos viejos con los nuevos cambios
+        historial[indiceExistente] = asistencia;
+    } else {
+        // Si es un día nuevo, lo agregamos al historial
+        historial.push(asistencia);
+    }
+
+    // Guardar definitivamente la lista actualizada en LocalStorage
     localStorage.setItem(`historial_${gradoActual}_${mesActual}`, JSON.stringify(historial));
-    alert(`Asistencia de ${mesActual} Guardada Exitosamente`);
+    alert(`Asistencia del día ${fecha} (${mesActual}) Guardada Exitosamente.`);
 }
 
 function nuevaAsistencia() {
@@ -445,35 +408,26 @@ function nuevaAsistencia() {
         const select = document.getElementById(`estado-${i}`);
         if(select) select.value = "A";
     });
-    alert("Lista reiniciada");
+    alert("Selectores reiniciados temporalmente en pantalla a 'Asistió'.");
 }
 
 function eliminarHistorial() {
     if (confirm(`¿Eliminar todo el historial de ${gradoActual} del mes de ${mesActual}?`)) {
         localStorage.removeItem(`historial_${gradoActual}_${mesActual}`);
         historial = [];
+        document.getElementById("fecha-asistencia").value = "";
         alert(`Historial de ${mesActual} eliminado`);
         generarListaAlumnos();
     }
 }
 
-// ==============================================================
-// NUEVA FUNCIÓN: ELIMINAR EL MES COMPLETO DE LOS 5 GRADOS A LA VEZ
-// ==============================================================
 function eliminarMesCompleto() {
     actualizarMesActual();
-    
-    // Primer filtro de seguridad
     if (confirm(`⚠ ATENCIÓN: ¿Está completamente seguro de que desea eliminar TODO el historial de asistencia de los CINCO GRADOS correspondientes al mes de ${mesActual}?`)) {
-        
-        // Segundo filtro de seguridad (Doble confirmación)
         if (confirm(`🚨 ¡ESTA ACCIÓN NO SE PUEDE DESHACER!\nSe borrarán las asistencias de 1°, 2°, 3°, 4° y 5° de Secundaria del mes de ${mesActual}.\n\n¿Desea continuar de todos modos?`)) {
-            
-            // Recorrer los 5 grados y limpiar las llaves de memoria de ese mes específico
             listaGrados.forEach(grado => {
                 localStorage.removeItem(`historial_${grado}_${mesActual}`);
             });
-            
             alert(`🗑 Los registros de asistencia del mes de ${mesActual} han sido eliminados por completo de toda la institución.`);
         }
     }
@@ -691,3 +645,4 @@ function abrirConsolidadoWeb() {
 
 </body>
 </html>
+   
