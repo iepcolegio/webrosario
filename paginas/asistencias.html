@@ -1,3 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal Escolar - Asistencia</title>
+
+<style>
+    /* --- ESTILOS GENERALES Y MENÚ PRINCIPAL --- */
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to right, #1e3c72, #2a5298);
+        text-align: center;
+        color: white;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+    }
+
+    .contenedor-menu {
+        margin-top: 30px;
+        display: block;
+    }
+
+    h1 {
+        margin-top: 10px;
+        font-size: 32px;
+    }
+
+    .caja-mes {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 15px;
+        border-radius: 12px;
+        width: 280px;
+        margin: 20px auto 0 auto;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .caja-mes label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8px;
+        font-size: 16px;
+        color: #ffcc00;
+    }
+
+    .select-mes-principal {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: none;
+        font-size: 16px;
+        font-weight: bold;
+        color: #1e3c72;
+        background: white;
+        cursor: pointer;
+    }
+
+    .botones-menu {
+        margin-top: 25px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .boton-grado {
+        width: 250px;
+        padding: 15px;
+        font-size: 18px;
+        border-radius: 10px;
+        background: #ffcc00;
+        color: black;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s;
+        border: none;
+        cursor: pointer;
+    }
+
+    .boton-grado:hover {
+        background: #ffaa00;
+        transform: scale(1.05);
+    }
+
+    .boton-consolidado {
+        background: #00ecb8;
+        color: #03233c;
+        margin-top: 5px;
+        border: 2px solid white;
+    }
+    .boton-consolidado:hover {
+        background: #00c499;
+    }
+
+    .boton-eliminar-mes {
+        background: #dc3545;
+        color: white;
+        margin-top: 5px;
+        border: 2px solid white;
+        font-size: 15px;
+        width: 250px;
+    }
+    .boton-eliminar-mes:hover {
+        background: #bd2130;
+    }
+
+    /* --- ESTILOS DE LA SECCIÓN DE ASISTENCIA --- */
+    .seccion-asistencia {
+        display: none;
+        background: #f2f2f2;
+        color: black;
+        padding: 20px;
+        min-height: 100vh;
+        box-sizing: border-box;
+        text-align: left;
+    }
+
+    .seccion-asistencia h2 {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    /* Estilo del selector de fecha dentro de la asistencia */
+    .caja-fecha-registro {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .caja-fecha-registro label {
+        font-weight: bold;
+        font-size: 16px;
+        color: #1e3c72;
+    }
+
+    .caja-fecha-registro input {
+        padding: 8px;
+        font-size: 16px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-weight: bold;
+    }
+
+    .card {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .nombre {
+        font-size: 18px;
+        margin-bottom: 10px;
+        font-weight: bold;
+        word-break: break-word;
+    }
+
+    select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 16px;
+    }
+
+    .botones-asistencia {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .btn-action {
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-size: 17px;
+        cursor: pointer;
+        transition: 0.3s;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .btn-action:hover {
+        opacity: 0.9;
+        transform: scale(1.02);
+    }
+
+    .volver { background: #6c757d; margin-bottom: 15px; }
+    .guardar { background: #28a745; }
+    .nueva { background: #ff9800; }
+    .exportar { background: #007bff; }
+    .eliminar { background: #dc3545; }
+</style>
+</head>
+
+<body>
+
+<div id="pantalla-menu" class="contenedor-menu">
+    <img src="insignia3.jpg" width="100px" height="140px" onerror="this.src='insignia.jpg'">
+    <h1>Asistencia de Secundaria</h1>
+
+    <div class="caja-mes">
+        <label for="selector-mes">📅 SELECCIONAR MES DE TRABAJO:</label>
+        <select id="selector-mes" class="select-mes-principal" onchange="actualizarMesActual()">
+            <option value="MARZO">MARZO</option>
+            <option value="ABRIL">ABRIL</option>
+            <option value="MAYO" selected>MAYO</option>
+            <option value="JUNIO">JUNIO</option>
+            <option value="JULIO">JULIO</option>
+            <option value="AGOSTO">AGOSTO</option>
+            <option value="SETIEMBRE">SETIEMBRE</option>
+            <option value="OCTUBRE">OCTUBRE</option>
+            <option value="NOVIEMBRE">NOVIEMBRE</option>
+            <option value="DICIEMBRE">DICIEMBRE</option>
+        </select>
+    </div>
+
+    <div class="botones-menu">
+        <button class="boton-grado" onclick="abrirAsistencia('1° SECUNDARIA')">1° de Secundaria</button>
+        <button class="boton-grado" onclick="abrirAsistencia('2° SECUNDARIA')">2° de Secundaria</button>
+        <button class="boton-grado" onclick="abrirAsistencia('3° SECUNDARIA')">3° de Secundaria</button>
+        <button class="boton-grado" onclick="abrirAsistencia('4° SECUNDARIA')">4° de Secundaria</button>
+        <button class="boton-grado" onclick="abrirAsistencia('5° SECUNDARIA')">5° de Secundaria</button>
+        
+        <button class="boton-grado boton-consolidado" onclick="abrirConsolidadoWeb()">📊 Consolidado General</button>
+        
+        <button class="boton-grado boton-eliminar-mes" onclick="eliminarMesCompleto()">🗑️ Eliminar Datos del Mes</button>
+    </div>
+</div>
+
+<div id="pantalla-asistencia" class="seccion-asistencia">
+    
+    <button class="btn-action volver" onclick="volverAlMenu()">⬅ Volver al Menú</button>
+
+    <p align="center">
+        <img src="insignia.jpg" width="60" height="70" onerror="this.src='insignia3.jpg'">
+    </p>
+
+    <h2 id="titulo-grado">📚 Asistencia Escolar</h2>
+
+    <div class="caja-fecha-registro">
+        <label for="fecha-asistencia">📆 Fecha del Registro:</label>
+        <input type="text" id="fecha-asistencia" placeholder="Ej: 11/05" onchange="cargarAsistenciaPorFecha()">
+    </div>
+
+    <div id="lista"></div>
+
+    <div class="botones-asistencia">
+        <button class="btn-action guardar" onclick="guardarAsistencia()">
+            💾 Guardar Asistencia
+        </button>
+        <button class="btn-action nueva" onclick="nuevaAsistencia()">
+            ➕ Nueva Asistencia (Reiniciar Lista)
+        </button>
+        <button class="btn-action exportar" onclick="exportarVistaWeb()">
+            📊 Ver Reporte / Imprimir
+        </button>
+        <button class="btn-action eliminar" onclick="eliminarHistorial()">
+            🗑️ Eliminar Historial (Grado Activo)
+        </button>
+    </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
@@ -394,3 +665,6 @@ function abrirConsolidadoWeb() {
     });
 }
 </script>
+
+</body>
+</html>
