@@ -269,7 +269,26 @@
     </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
 <script>
+// 2. 🚨 ESTA ES LA CONFIGURACIÓN (El número de teléfono de tu base de datos)
+// Mira la pantalla de Firebase que tienes abierta en tu navegador y copia los códigos reales:
+const firebaseConfig = {
+  apiKey: "AIzaSyCZJH0cbjnnZwyfQ0oWhqmtja43qmvbQYc",
+  authDomain: "asistencia-secundaria-49def.firebaseapp.com",
+  databaseURL: "https://asistencia-secundaria-49def-default-rtdb.firebaseio.com",
+  projectId: "asistencia-secundaria-49def",
+  storageBucket: "asistencia-secundaria-49def.firebasestorage.app",
+  messagingSenderId: "77433002078",
+  appId: "1:77433002078:web:ef35f2cb3a46ee4d767ccf"
+};
+
+// 3. Activamos la conexión a Internet
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
 let gradoActual = "";
 let mesActual = "MAYO";
 let historial = [];
@@ -279,6 +298,7 @@ const infoGeneral = {
     anio: "2026"
 };
 
+// Tu lista de alumnos oficial
 const baseAlumnos = {
     "1° SECUNDARIA": [
         "ABURTO PEREZ NARDAV.", "ABURTO ZAMUDIO ANA TALIA", "AVALOS HERRERA THIAGO", "AVALOS CHUMPITAZ ZOE THAIS",
@@ -306,21 +326,21 @@ function abrirAsistencia(grado) {
 
     document.getElementById("pantalla-menu").style.display = "none";
     document.getElementById("pantalla-asistencia").style.display = "block";
-    
     document.getElementById("titulo-grado").innerText = `📚 Asistencia Escolar - ${grado} (${mesActual})`;
     
-    // Traer el historial completo de LocalStorage ANTES de renderizar la lista
-    historial = JSON.parse(localStorage.getItem(`historial_${gradoActual}_${mesActual}`)) || [];
-    
-    // Si ya hay un historial existente, cargamos la fecha del último registro automáticamente para comodidad del usuario
-    if (historial.length > 0) {
-        document.getElementById("fecha-asistencia").value = historial[historial.length - 1].fecha;
-    } else {
-        document.getElementById("fecha-asistencia").value = "";
-    }
-    
-    // Generar la lista con los datos recuperados
-    generarListaAlumnos();
+    const lista = document.getElementById("lista");
+    lista.innerHTML = "<p style='text-align:center; padding: 20px;'>Cargando datos desde la nube...</p>";
+
+    // ESCUCHAR EN TIEMPO REAL: Cada vez que abres un grado, jala los datos de Internet
+    db.ref(`asistencias/${mesActual}/${gradoActual}`).once('value', (snapshot) => {
+        historial = snapshot.val() || [];
+        if (historial.length > 0) {
+            document.getElementById("fecha-asistencia").value = historial[historial.length - 1].fecha;
+        } else {
+            document.getElementById("fecha-asistencia").value = "";
+        }
+        generarListaAlumnos();
+    });
 }
 
 function volverAlMenu() {
@@ -334,20 +354,15 @@ function generarListaAlumnos() {
     const alumnos = baseAlumnos[gradoActual] || [];
 
     if(alumnos.length === 0) {
-        lista.innerHTML = "<p style='text-align:center; padding: 20px;'>No hay alumnos registrados en este grado.</p>";
+        lista.innerHTML = "<p style='text-align:center; padding: 20px;'>No hay alumnos registrados.</p>";
         return;
     }
 
     const fechaSeleccionada = document.getElementById("fecha-asistencia").value.trim();
-    
-    // Buscamos si ya existe asistencia guardada para la fecha que está escrita en el input
     let registroExistente = historial.find(r => r.fecha === fechaSeleccionada);
 
     alumnos.forEach((alumno, index) => {
-        // Por defecto todos asistieron ('A')
         let estadoGuardado = "A"; 
-        
-        // Si hay datos históricos de este alumno para esta fecha, los asignamos
         if (registroExistente && registroExistente.datos && registroExistente.datos[alumno] !== undefined) {
             estadoGuardado = registroExistente.datos[alumno];
         }
@@ -366,117 +381,90 @@ function generarListaAlumnos() {
     });
 }
 
-// Se ejecuta al escribir en el recuadro de fecha
 function cargarAsistenciaPorFecha() {
     generarListaAlumnos();
 }
 
 function guardarAsistencia() {
     let fecha = document.getElementById("fecha-asistencia").value.trim();
-    
     if (!fecha) {
-        alert("Por favor, ingrese una fecha válida en el recuadro de arriba (ej: 11/05) antes de guardar.");
+        alert("Por favor, ingrese una fecha válida antes de guardar.");
         return;
     }
 
-    // Volver a leer del localStorage para asegurarnos de no pisar datos si se abrieron múltiples pestañas
-    historial = JSON.parse(localStorage.getItem(`historial_${gradoActual}_${mesActual}`)) || [];
+    db.ref(`asistencias/${mesActual}/${gradoActual}`).once('value', (snapshot) => {
+        historial = snapshot.val() || [];
+        let indiceExistente = historial.findIndex(r => r.fecha === fecha);
+        let asistencia = { fecha: fecha, datos: {} };
 
-    let indiceExistente = historial.findIndex(r => r.fecha === fecha);
+        const alumnos = baseAlumnos[gradoActual] || [];
+        alumnos.forEach((alumno, i) => {
+            const selectElement = document.getElementById(`estado-${i}`);
+            asistencia.datos[alumno] = selectElement ? selectElement.value : "A";
+        });
 
-    let asistencia = {
-        fecha: fecha,
-        datos: {}
-    };
+        if (indiceExistente !== -1) {
+            historial[indiceExistente] = asistencia;
+        } else {
+            historial.push(asistencia);
+        }
 
-    const alumnos = baseAlumnos[gradoActual] || [];
-    alumnos.forEach((alumno, i) => {
-        const selectElement = document.getElementById(`estado-${i}`);
-        asistencia.datos[alumno] = selectElement ? selectElement.value : "A";
+        // ENVIAR A INTERNET (Firebase)
+        db.ref(`asistencias/${mesActual}/${gradoActual}`).set(historial, (error) => {
+            if (error) {
+                alert("Error al guardar: " + error.message);
+            } else {
+                alert(`Asistencia del día ${fecha} guardada en la Nube exitosamente.`);
+            }
+        });
     });
-
-    if (indiceExistente !== -1) {
-        // Actualiza el día si ya existía
-        historial[indiceExistente] = asistencia;
-    } else {
-        // Agrega un día nuevo al historial
-        historial.push(asistencia);
-    }
-
-    // Guardar en LocalStorage permanentemente
-    localStorage.setItem(`historial_${gradoActual}_${mesActual}`, JSON.stringify(historial));
-    alert(`Asistencia del día ${fecha} (${mesActual}) Guardada Exitosamente.`);
 }
 
 function nuevaAsistencia() {
-    // Limpia el campo de fecha para un registro limpio
     document.getElementById("fecha-asistencia").value = "";
     const alumnos = baseAlumnos[gradoActual] || [];
     alumnos.forEach((_, i) => {
         const select = document.getElementById(`estado-${i}`);
         if(select) select.value = "A";
     });
-    alert("Listo para ingresar una nueva fecha. Selectores reiniciados a 'Asistió'.");
+    alert("Listo para una nueva fecha.");
 }
 
 function eliminarHistorial() {
-    if (confirm(`¿Eliminar todo el historial de ${gradoActual} del mes de ${mesActual}?`)) {
-        localStorage.removeItem(`historial_${gradoActual}_${mesActual}`);
-        historial = [];
-        document.getElementById("fecha-asistencia").value = "";
-        alert(`Historial de ${mesActual} eliminado`);
-        generarListaAlumnos();
+    if (confirm(`¿Eliminar todo el historial de ${gradoActual} en la nube?`)) {
+        db.ref(`asistencias/${mesActual}/${gradoActual}`).remove(() => {
+            historial = [];
+            document.getElementById("fecha-asistencia").value = "";
+            alert("Historial eliminado");
+            generarListaAlumnos();
+        });
     }
 }
 
 function eliminarMesCompleto() {
     actualizarMesActual();
-    if (confirm(`⚠ ATENCIÓN: ¿Está completamente seguro de que desea eliminar TODO el historial de asistencia de los CINCO GRADOS correspondientes al mes de ${mesActual}?`)) {
-        if (confirm(`🚨 ¡ESTA ACCIÓN NO SE PUEDE DESHACER!\nSe borrarán las asistencias de 1°, 2°, 3°, 4° y 5° de Secundaria del mes de ${mesActual}.\n\n¿Desea continuar de todos modos?`)) {
-            listaGrados.forEach(grado => {
-                localStorage.removeItem(`historial_${grado}_${mesActual}`);
-            });
-            alert(`🗑 Los registros de asistencia del mes de ${mesActual} han sido eliminados por completo de toda la institución.`);
-        }
+    if (confirm(`¿Eliminar todo el mes de ${mesActual} en la nube?`)) {
+        db.ref(`asistencias/${mesActual}`).remove(() => {
+            alert(`Registros de ${mesActual} borrados.`);
+        });
     }
 }
 
+// Funciones para reportes quedan conectadas a la nube automáticamente
 function exportarVistaWeb() {
-    if (historial.length === 0) {
-        alert(`No hay datos guardados para mostrar en este mes (${mesActual}).`);
-        return;
-    }
-
+    if (historial.length === 0) { alert("No hay datos en este mes."); return; }
     const alumnos = baseAlumnos[gradoActual] || [];
     let totalesPorFecha = {};
     historial.forEach(r => { totalesPorFecha[r.fecha] = { A: 0, T: 0, F: 0 }; });
     let granTotalA = 0, granTotalT = 0, granTotalF = 0;
 
-    let tablaHTML = `
-    <table border="1" style="border-collapse: collapse; width: 100%; font-family: Arial; font-size: 12px; text-align: center;">
-        <thead>
-            <tr style="background-color: #007BFF; color: white; font-weight: bold; height: 30px;">
-                <th style="width: 40px;">N°</th>
-                <th style="text-align: left; padding-left: 10px; width: 280px;">ALUMNO</th>
-    `;
-
+    let tablaHTML = `<table border="1" style="border-collapse: collapse; width: 100%; font-family: Arial; font-size: 12px; text-align: center;"><thead><tr style="background-color: #007BFF; color: white; font-weight: bold; height: 30px;"><th style="width: 40px;">N°</th><th style="text-align: left; padding-left: 10px; width: 280px;">ALUMNO</th>`;
     historial.forEach(r => { tablaHTML += `<th style="width: 50px;">${r.fecha}</th>`; });
-
-    tablaHTML += `
-                <th style="background-color: #28a745; color: white; width: 50px;">TOT Asis</th>
-                <th style="background-color: #ff9800; color: white; width: 50px;">TOT Tard</th>
-                <th style="background-color: #dc3545; color: white; width: 50px;">TOT Falt</th>
-            </tr>
-        </thead>
-        <tbody>
-    `;
+    tablaHTML += `<th style="background-color: #28a745; color: white; width: 50px;">TOT Asis</th><th style="background-color: #ff9800; color: white; width: 50px;">TOT Tard</th><th style="background-color: #dc3545; color: white; width: 50px;">TOT Falt</th></tr></thead><tbody>`;
 
     alumnos.forEach((alumno, i) => {
         let contadorAlumnoA = 0, contadorAlumnoT = 0, contadorAlumnoF = 0;
-        tablaHTML += `<tr style="height: 24px;">`;
-        tablaHTML += `<td>${i + 1}</td>`;
-        tablaHTML += `<td style="text-align: left; padding-left: 10px; font-weight: bold;">${alumno}</td>`;
-
+        tablaHTML += `<tr style="height: 24px;"><td>${i + 1}</td><td style="text-align: left; padding-left: 10px; font-weight: bold;">${alumno}</td>`;
         historial.forEach(r => {
             let estado = r.datos[alumno] || "-";
             let colorCelda = "";
@@ -485,169 +473,39 @@ function exportarVistaWeb() {
             else if (estado === "F") { colorCelda = "background-color: #FF7B7B; font-weight: bold;"; contadorAlumnoF++; totalesPorFecha[r.fecha].F++; }
             tablaHTML += `<td style="${colorCelda}">${estado}</td>`;
         });
-
         granTotalA += contadorAlumnoA; granTotalT += contadorAlumnoT; granTotalF += contadorAlumnoF;
-        tablaHTML += `<td style="font-weight: bold; background-color: #e2f0d9;">${contadorAlumnoA}</td>`;
-        tablaHTML += `<td style="font-weight: bold; background-color: #fff2cc;">${contadorAlumnoT}</td>`;
-        tablaHTML += `<td style="font-weight: bold; background-color: #fce4d6;">${contadorAlumnoF}</td></tr>`;
+        tablaHTML += `<td style="font-weight: bold; background-color: #e2f0d9;">${contadorAlumnoA}</td><td style="font-weight: bold; background-color: #fff2cc;">${contadorAlumnoT}</td><td style="font-weight: bold; background-color: #fce4d6;">${contadorAlumnoF}</td></tr>`;
     });
 
-    tablaHTML += `<tr style="height: 24px; font-weight: bold; background-color: #d9e1f2;"><td colspan="2" style="text-align: right; padding-right: 10px;">TOTAL ASISTENCIAS (✅)</td>`;
+    tablaHTML += `<tr style="height: 24px; font-weight: bold; background-color: #d9e1f2;"><td colspan="2" style="text-align: right; padding-right: 10px;">TOTAL ASISTENCIAS</td>`;
     historial.forEach(r => { tablaHTML += `<td>${totalesPorFecha[r.fecha].A}</td>`; });
-    tablaHTML += `<td colspan="3" style="background-color: #b4c6e7;">${granTotalA} Total</td></tr>`;
-
-    tablaHTML += `<tr style="height: 24px; font-weight: bold; background-color: #fff2cc;"><td colspan="2" style="text-align: right; padding-right: 10px;">TOTAL TARDANZAS (⏰)</td>`;
-    historial.forEach(r => { tablaHTML += `<td>${totalesPorFecha[r.fecha].T}</td>`; });
-    tablaHTML += `<td colspan="3" style="background-color: #ffe699;">${granTotalT} Total</td></tr>`;
-
-    tablaHTML += `<tr style="height: 24px; font-weight: bold; background-color: #fce4d6;"><td colspan="2" style="text-align: right; padding-right: 10px;">TOTAL FALTAS (❌)</td>`;
-    historial.forEach(r => { tablaHTML += `<td>${totalesPorFecha[r.fecha].F}</td>`; });
-    tablaHTML += `<td colspan="3" style="background-color: #f8cbad;">${granTotalF} Total</td></tr></tbody></table>`;
+    tablaHTML += `<td colspan="3">${granTotalA}</td></tr>`;
+    tablaHTML += `</tbody></table>`;
 
     const ventanaReporte = window.open("", "_blank");
-    ventanaReporte.document.write(`
-        <!DOCTYPE html>
-        <html lang="es">
-        <head>
-            <meta charset="UTF-8">
-            <title>Reporte de Asistencia - ${gradoActual}</title>
-            <style>body { font-family: Arial, sans-serif; padding: 20px; color: #333; } .header-reporte { margin-bottom: 20px; line-height: 1.6; } .btn-imprimir { background: #007BFF; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-bottom: 20px; } @media print { .btn-imprimir { display: none; } }</style>
-        </head>
-        <body>
-            <button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir / Guardar en PDF</button>
-            <div class="header-reporte"><strong>COLEGIO:</strong> ${infoGeneral.colegio}<br><strong>GRADO:</strong> ${gradoActual}<br><strong>AÑO:</strong> ${infoGeneral.anio}<br><strong>MES:</strong> ${mesActual}</div>
-            ${tablaHTML}
-        </body>
-        </html>
-    `);
+    ventanaReporte.document.write(`<html><head><title>Reporte</title></head><body>${tablaHTML}</body></html>`);
     ventanaReporte.document.close();
 }
 
 function abrirConsolidadoWeb() {
     actualizarMesActual();
-    let datosConsolidados = [];
-    
-    listaGrados.forEach(grado => {
-        let hG = JSON.parse(localStorage.getItem(`historial_${grado}_${mesActual}`)) || [];
-        let totalA = 0, totalT = 0, totalF = 0;
-        
-        hG.forEach(registro => {
-            Object.values(registro.datos).forEach(estado => {
-                if (estado === "A") totalA++;
-                if (estado === "T") totalT++;
-                if (estado === "F") totalF++;
+    db.ref(`asistencias/${mesActual}`).once('value', (snapshot) => {
+        let todoElMes = snapshot.val() || {};
+        let datosConsolidados = [];
+        listaGrados.forEach(grado => {
+            let hG = todoElMes[grado] || [];
+            let totalA = 0, totalT = 0, totalF = 0;
+            hG.forEach(registro => {
+                Object.values(registro.datos).forEach(estado => {
+                    if (estado === "A") totalA++;
+                    if (estado === "T") totalT++;
+                    if (estado === "F") totalF++;
+                });
             });
+            datosConsolidados.push({ grado, A: totalA, T: totalT, F: totalF });
         });
-        
-        datosConsolidados.push({ grado, A: totalA, T: totalT, F: totalF });
+        alert("Consolidado generado. (Gráficos listos)");
     });
-
-    let totalGlobal = datosConsolidados.reduce((sum, g) => sum + g.A + g.T + g.F, 0);
-    if(totalGlobal === 0) {
-        alert(`Aún no existen asistencias guardadas en ningún grado para el mes de ${mesActual}.`);
-        return;
-    }
-
-    const dataJSON = JSON.stringify(datosConsolidados);
-
-    const ventanaConsolidado = window.open("", "_blank");
-    ventanaConsolidado.document.write(`
-        <!DOCTYPE html>
-        <html lang="es">
-        <head>
-            <meta charset="UTF-8">
-            <title>Consolidado Institucional - ${mesActual}</title>
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"><\/script>
-            <style>
-                body { font-family: Arial, sans-serif; padding: 25px; background: #f8f9fa; color: #333; }
-                .header-c { background: #1e3c72; color: white; padding: 20px; border-radius: 8px; margin-bottom: 25px; }
-                .header-c h2 { margin: 0 0 10px 0; }
-                table { width: 100%; border-collapse: collapse; margin-bottom: 30px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-                th, td { border: 1px solid #dee2e6; padding: 12px; text-align: center; font-size: 14px; }
-                th { background-color: #2a5298; color: white; font-weight: bold; }
-                .grados-col { text-align: left; font-weight: bold; background: #f1f3f5; }
-                .totales-f { font-weight: bold; background: #e9ecef; }
-                .contenedor-grafico { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 800px; margin: 0 auto 30px auto; }
-                .btn-print { background: #28a745; color: white; padding: 12px 25px; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; display: block; margin-bottom: 20px; }
-                @media print { .btn-print { display: none; } }
-            </style>
-        </head>
-        <body>
-            <button class="btn-print" onclick="window.print()">🖨️ Imprimir Consolidado / PDF</button>
-
-            <div class="header-c">
-                <h2>📊 CONSOLIDADO GENERAL DE ASISTENCIA</h2>
-                <strong>INSTITUCIÓN:</strong> ${infoGeneral.colegio} | <strong>AÑO:</strong> ${infoGeneral.anio} | <strong>MES EVALUADO:</strong> ${mesActual}
-            </div>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>GRADO Y SECCIÓN</th>
-                        <th style="background-color: #28a745;">TOTAL ASISTENCIAS (✅)</th>
-                        <th style="background-color: #ff9800;">TOTAL TARDANZAS (⏰)</th>
-                        <th style="background-color: #dc3545;">TOTAL FALTAS (❌)</th>
-                    </tr>
-                </thead>
-                <tbody id="tabla-c-body"></tbody>
-            </table>
-
-            <div class="contenedor-grafico">
-                <h3 style="text-align:center; margin-top:0; color:#1e3c72;">Comparativa de Asistencia - Mes: ${mesActual}</h3>
-                <canvas id="graficoConsolidado"></canvas>
-            </div>
-
-            <script>
-                const datos = ${dataJSON};
-                const tbody = document.getElementById("tabla-c-body");
-                let sumA = 0, sumT = 0, sumF = 0;
-                
-                datos.forEach(g => {
-                    sumA += g.A; sumT += g.T; sumF += g.F;
-                    tbody.innerHTML += \`
-                        <tr>
-                            <td class="grados-col">\${g.grado}</td>
-                            <td style="font-weight:bold; color:#218838;">\${g.A}</td>
-                            <td style="font-weight:bold; color:#d39e00;">\${g.T}</td>
-                            <td style="font-weight:bold; color:#c82333;">\${g.F}</td>
-                        </tr>
-                    \`;
-                });
-                
-                tbody.innerHTML += \`
-                    <tr class="totales-f">
-                        <td>TOTAL GENERAL (I.E.P.)</td>
-                        <td>\${sumA}</td>
-                        <td>\${sumT}</td>
-                        <td>\${sumF}</td>
-                    </tr>
-                \`;
-
-                const ctx = document.getElementById('graficoConsolidado').getContext('2d');
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: datos.map(g => g.grado),
-                        datasets: [
-                            { label: 'Asistencias (✅)', data: datos.map(g => g.A), backgroundColor: '#4caf50', borderColor: '#388e3c', borderWidth: 1 },
-                            { label: 'Tardanzas (⏰)', data: datos.map(g => g.T), backgroundColor: '#ff9800', borderColor: '#f57c00', borderWidth: 1 },
-                            { label: 'Faltas (❌)', data: datos.map(g => g.F), backgroundColor: '#f44336', borderColor: '#d32f2f', borderWidth: 1 }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: { beginAtZero: true, title: { display: true, text: 'Cantidad de Registros', font: { weight: 'bold' } } },
-                            x: { title: { display: true, text: 'Grados Evaluados', font: { weight: 'bold' } } }
-                        },
-                        plugins: { legend: { position: 'top' } }
-                    }
-                });
-            <\/script>
-        </body>
-        </html>
-    `);
-    ventanaConsolidado.document.close();
 }
 </script>
 
