@@ -269,24 +269,7 @@
     </div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyCZJH0cbjnnZwyfQ0oWhqmtja43qmvbQYc",
-  authDomain: "asistencia-secundaria-49def.firebaseapp.com",
-  databaseURL: "https://console.firebase.google.com/u/0/project/asistencia-secundaria-49def/database/asistencia-secundaria-49def-default-rtdb/data/~2F",
-  projectId: "asistencia-secundaria-49def",
-  storageBucket: "asistencia-secundaria-49def.firebasestorage.app",
-  messagingSenderId: "77433002078",
-  appId: "1:77433002078:web:bc09b473922983e4767ccf"
-};
-
-// Inicializar Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-
 let gradoActual = "";
 let mesActual = "MAYO";
 let historial = [];
@@ -313,15 +296,6 @@ const baseAlumnos = {
 
 const listaGrados = ["1° SECUNDARIA", "2° SECUNDARIA", "3° SECUNDARIA", "4° SECUNDARIA", "5° SECUNDARIA"];
 
-function obtenerNodoGrado(grado) {
-    if (grado.includes("1°")) return "primero";
-    if (grado.includes("2°")) return "segundo";
-    if (grado.includes("3°")) return "tercero";
-    if (grado.includes("4°")) return "cuarto";
-    if (grado.includes("5°")) return "quinto";
-    return "general";
-}
-
 function actualizarMesActual() {
     mesActual = document.getElementById("selector-mes").value;
 }
@@ -332,32 +306,17 @@ function abrirAsistencia(grado) {
 
     document.getElementById("pantalla-menu").style.display = "none";
     document.getElementById("pantalla-asistencia").style.display = "block";
+    
     document.getElementById("titulo-grado").innerText = `📚 Asistencia Escolar - ${grado} (${mesActual})`;
     
-    cargarDatosDesdeNube();
-}
-
-function cargarDatosDesdeNube() {
-    const lista = document.getElementById("lista");
-    lista.innerHTML = "<p style='text-align:center; padding: 20px;'>Cargando datos desde la nube...</p>";
-
-    let nodoGrado = obtenerNodoGrado(gradoActual);
-
-    db.ref(`asistencias/${mesActual}/${nodoGrado}`).once('value', (snapshot) => {
-        const datosNube = snapshot.val() || {};
-        historial = Object.keys(datosNube).map(fechaKey => {
-            return {
-                fecha: fechaKey.replace('d', '').replace('_', '/'),
-                datos: datosNube[fechaKey]
-            };
-        });
-        
-        if (historial.length > 0 && !document.getElementById("fecha-asistencia").value) {
-            document.getElementById("fecha-asistencia").value = historial[historial.length - 1].fecha;
-        }
-        
-        generarListaAlumnos();
-    });
+    // Dejar el input de fecha vacío o poner una ayuda visual
+    document.getElementById("fecha-asistencia").value = "";
+    
+    // Traer el historial completo de LocalStorage
+    historial = JSON.parse(localStorage.getItem(`historial_${gradoActual}_${mesActual}`)) || [];
+    
+    // Generar la lista inicial (estará en blanco o por defecto en 'A')
+    generarListaAlumnos();
 }
 
 function volverAlMenu() {
@@ -375,13 +334,18 @@ function generarListaAlumnos() {
         return;
     }
 
+    // Averiguar qué fecha está puesta en el input de texto
     const fechaSeleccionada = document.getElementById("fecha-asistencia").value.trim();
+    
+    // Buscar si ya se guardó asistencia para esta fecha específica anteriormente
     let registroExistente = historial.find(r => r.fecha === fechaSeleccionada);
 
     alumnos.forEach((alumno, index) => {
+        // Por defecto todos asistieron ('A')
         let estadoGuardado = "A"; 
         
-        if (registroExistente && registroExistente.datos && registroExistente.datos[alumno] !== undefined) {
+        // Pero si existía un registro guardado para este día, tomamos ese valor histórico
+        if (registroExistente && registroExistente.datos && registroExistente.datos[alumno]) {
             estadoGuardado = registroExistente.datos[alumno];
         }
 
@@ -399,6 +363,7 @@ function generarListaAlumnos() {
     });
 }
 
+// Esta función se ejecuta sola cuando escribes o cambias la fecha en el recuadro
 function cargarAsistenciaPorFecha() {
     generarListaAlumnos();
 }
@@ -407,63 +372,63 @@ function guardarAsistencia() {
     let fecha = document.getElementById("fecha-asistencia").value.trim();
     
     if (!fecha) {
-        alert("Por favor, ingrese una fecha válida en el recuadro (ej: 11/05) antes de guardar.");
+        alert("Por favor, ingrese una fecha válida en el recuadro de arriba (ej: 11/05) antes de guardar.");
         return;
     }
 
-    // Formato compatible seguro para las llaves de Firebase (ej: d11_05)
-    let fechaKey = "d" + fecha.replace('/', '_');
-    let datosAlumnos = {};
+    // Buscamos si la fecha ya existía en el historial para actualizarla en vez de duplicarla
+    let indiceExistente = historial.findIndex(r => r.fecha === fecha);
+
+    let asistencia = {
+        fecha: fecha,
+        datos: {}
+    };
 
     const alumnos = baseAlumnos[gradoActual] || [];
     alumnos.forEach((alumno, i) => {
-        const selectElement = document.getElementById(`estado-${i}`);
-        datosAlumnos[alumno] = selectElement ? selectElement.value : "A";
+        asistencia.datos[alumno] = document.getElementById(`estado-${i}`).value;
     });
 
-    let nodoGrado = obtenerNodoGrado(gradoActual);
+    if (indiceExistente !== -1) {
+        // Si ya existía el día, sobreescribimos los datos viejos con los nuevos cambios
+        historial[indiceExistente] = asistencia;
+    } else {
+        // Si es un día nuevo, lo agregamos al historial
+        historial.push(asistencia);
+    }
 
-    // Guardar directo sin interferencias
-    db.ref(`asistencias/${mesActual}/${nodoGrado}/${fechaKey}`).set(datosAlumnos, (error) => {
-        if (error) {
-            alert("❌ Error al guardar en la nube: " + error.message);
-        } else {
-            // ¡MENSAJE DE CONFIRMACIÓN DE GUARDADO POR DÍA EXITOSO!
-            alert(`💾 ¡ASISTENCIA GUARDADA POR DÍA!\n\nLos datos del día [ ${fecha} ] para [ ${gradoActual} ] se grabaron con éxito en la nube.`);
-            cargarDatosDesdeNube(); // Recargar la lista para confirmar visualmente
-        }
-    });
+    // Guardar definitivamente la lista actualizada en LocalStorage
+    localStorage.setItem(`historial_${gradoActual}_${mesActual}`, JSON.stringify(historial));
+    alert(`Asistencia del día ${fecha} (${mesActual}) Guardada Exitosamente.`);
 }
 
 function nuevaAsistencia() {
-    document.getElementById("fecha-asistencia").value = "";
     const alumnos = baseAlumnos[gradoActual] || [];
     alumnos.forEach((_, i) => {
         const select = document.getElementById(`estado-${i}`);
         if(select) select.value = "A";
     });
-    alert("Listo para ingresar una nueva fecha. Selectores reiniciados a 'Asistió'.");
+    alert("Selectores reiniciados temporalmente en pantalla a 'Asistió'.");
 }
 
 function eliminarHistorial() {
-    if (confirm(`¿Eliminar todo el historial de ${gradoActual} del mes de ${mesActual} en la nube?`)) {
-        let nodoGrado = obtenerNodoGrado(gradoActual);
-        db.ref(`asistencias/${mesActual}/${nodoGrado}`).remove(() => {
-            historial = [];
-            document.getElementById("fecha-asistencia").value = "";
-            alert(`Historial de ${mesActual} eliminado de la nube`);
-            generarListaAlumnos();
-        });
+    if (confirm(`¿Eliminar todo el historial de ${gradoActual} del mes de ${mesActual}?`)) {
+        localStorage.removeItem(`historial_${gradoActual}_${mesActual}`);
+        historial = [];
+        document.getElementById("fecha-asistencia").value = "";
+        alert(`Historial de ${mesActual} eliminado`);
+        generarListaAlumnos();
     }
 }
 
 function eliminarMesCompleto() {
     actualizarMesActual();
-    if (confirm(`⚠ ATENCIÓN: ¿Desea eliminar TODO el historial de asistencia de los CINCO GRADOS del mes de ${mesActual} en la nube?`)) {
-        if (confirm(`🚨 ¡ESTA ACCIÓN NO SE PUEDE DESHACER!\n¿Desea continuar?`)) {
-            db.ref(`asistencias/${mesActual}`).remove(() => {
-                alert(`🗑 Los registros de asistencia del mes de ${mesActual} han sido eliminados por completo de la nube.`);
+    if (confirm(`⚠ ATENCIÓN: ¿Está completamente seguro de que desea eliminar TODO el historial de asistencia de los CINCO GRADOS correspondientes al mes de ${mesActual}?`)) {
+        if (confirm(`🚨 ¡ESTA ACCIÓN NO SE PUEDE DESHACER!\nSe borrarán las asistencias de 1°, 2°, 3°, 4° y 5° de Secundaria del mes de ${mesActual}.\n\n¿Desea continuar de todos modos?`)) {
+            listaGrados.forEach(grado => {
+                localStorage.removeItem(`historial_${grado}_${mesActual}`);
             });
+            alert(`🗑 Los registros de asistencia del mes de ${mesActual} han sido eliminados por completo de toda la institución.`);
         }
     }
 }
@@ -473,8 +438,6 @@ function exportarVistaWeb() {
         alert(`No hay datos guardados para mostrar en este mes (${mesActual}).`);
         return;
     }
-
-    historial.sort((a, b) => a.fecha.localeCompare(b.fecha));
 
     const alumnos = baseAlumnos[gradoActual] || [];
     let totalesPorFecha = {};
@@ -554,126 +517,131 @@ function exportarVistaWeb() {
 
 function abrirConsolidadoWeb() {
     actualizarMesActual();
+    let datosConsolidados = [];
     
-    db.ref(`asistencias/${mesActual}`).once('value', (snapshot) => {
-        let todoElMes = snapshot.val() || {};
-        let datosConsolidados = [];
+    listaGrados.forEach(grado => {
+        let hG = JSON.parse(localStorage.getItem(`historial_${grado}_${mesActual}`)) || [];
+        let totalA = 0, totalT = 0, totalF = 0;
         
-        listaGrados.forEach(grado => {
-            let nodoGrado = obtenerNodoGrado(grado);
-            let fechasGrado = todoElMes[nodoGrado] || {};
-            let totalA = 0, totalT = 0, totalF = 0;
-            
-            Object.values(fechasGrado).forEach(datosFecha => {
-                Object.values(datosFecha).forEach(estado => {
-                    if (estado === "A") totalA++;
-                    if (estado === "T") totalT++;
-                    if (estado === "F") totalF++;
-                });
+        hG.forEach(registro => {
+            Object.values(registro.datos).forEach(estado => {
+                if (estado === "A") totalA++;
+                if (estado === "T") totalT++;
+                if (estado === "F") totalF++;
             });
-            
-            datosConsolidados.push({ grado, A: totalA, T: totalT, F: totalF });
         });
+        
+        datosConsolidados.push({ grado, A: totalA, T: totalT, F: totalF });
+    });
 
-        let totalGlobal = datosConsolidados.reduce((sum, g) => sum + g.A + g.T + g.F, 0);
-        if(totalGlobal === 0) {
-            alert(`Aún no existen asistencias guardadas en ningún grado para el mes de ${mesActual} en la nube.`);
-            return;
-        }
+    let totalGlobal = datosConsolidados.reduce((sum, g) => sum + g.A + g.T + g.F, 0);
+    if(totalGlobal === 0) {
+        alert(`Aún no existen asistencias guardadas en ningún grado para el mes de ${mesActual}.`);
+        return;
+    }
 
-        const dataJSON = JSON.stringify(datosConsolidados);
-        const ventanaConsolidado = window.open("", "_blank");
-        ventanaConsolidado.document.write(`
-            <!DOCTYPE html>
-            <html lang="es">
-            <head>
-                <meta charset="UTF-8">
-                <title>Consolidado Institucional - ${mesActual}</title>
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"><\/script>
-                <style>
-                    body { font-family: Arial, sans-serif; padding: 25px; background: #f8f9fa; color: #333; }
-                    .header-c { background: #1e3c72; color: white; padding: 20px; border-radius: 8px; margin-bottom: 25px; }
-                    .header-c h2 { margin: 0 0 10px 0; }
-                    table { width: 100%; border-collapse: collapse; margin-bottom: 30px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-                    th, td { border: 1px solid #dee2e6; padding: 12px; text-align: center; font-size: 14px; }
-                    th { background-color: #2a5298; color: white; font-weight: bold; }
-                    .grados-col { text-align: left; font-weight: bold; background: #f1f3f5; }
-                    .totales-f { font-weight: bold; background: #e9ecef; }
-                    .contenedor-grafico { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 800px; margin: 0 auto 30px auto; }
-                    .btn-print { background: #28a745; color: white; padding: 12px 25px; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; display: block; margin-bottom: 20px; }
-                    @media print { .btn-print { display: none; } }
-                </style>
-            </head>
-            <body>
-                <button class="btn-print" onclick="window.print()">🖨️ Imprimir Consolidado / PDF</button>
-                <div class="header-c">
-                    <h2>📊 CONSOLIDADO GENERAL DE ASISTENCIA</h2>
-                    <strong>INSTITUCIÓN:</strong> ${infoGeneral.colegio} | <strong>AÑO:</strong> ${infoGeneral.anio} | <strong>MES EVALUADO:</strong> ${mesActual}
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>GRADO Y SECCIÓN</th>
-                            <th style="background-color: #28a745; color: white;">TOTAL ASISTENCIAS (✅)</th>
-                            <th style="background-color: #ff9800; color: white;">TOTAL TARDANZAS (⏰)</th>
-                            <th style="background-color: #dc3545; color: white;">TOTAL FALTAS (❌)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabla-c-body"></tbody>
-                </table>
-                <div class="contenedor-grafico">
-                    <h3 style="text-align:center; margin-top:0; color:#1e3c72;">Comparativa de Asistencia - Mes: ${mesActual}</h3>
-                    <canvas id="graficoConsolidado"></canvas>
-                </div>
-                <script>
-                    const datos = ${dataJSON};
-                    const tbody = document.getElementById("tabla-c-body");
-                    let sumA = 0, sumT = 0, sumF = 0;
-                    datos.forEach(g => {
-                        sumA += g.A; sumT += g.T; sumF += g.F;
-                        tbody.innerHTML += \`
-                            <tr>
-                                <td class="grados-col">\${g.grado}</td>
-                                <td style="font-weight:bold; color:#218838;">\${g.A}</td>
-                                <td style="font-weight:bold; color:#d39e00;">\${g.T}</td>
-                                <td style="font-weight:bold; color:#c82333;">\${g.F}</td>
-                            </tr>
-                        \`;
-                    });
+    const dataJSON = JSON.stringify(datosConsolidados);
+
+    const ventanaConsolidado = window.open("", "_blank");
+    ventanaConsolidado.document.write(`
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <title>Consolidado Institucional - ${mesActual}</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"><\/script>
+            <style>
+                body { font-family: Arial, sans-serif; padding: 25px; background: #f8f9fa; color: #333; }
+                .header-c { background: #1e3c72; color: white; padding: 20px; border-radius: 8px; margin-bottom: 25px; }
+                .header-c h2 { margin: 0 0 10px 0; }
+                table { width: 100%; border-collapse: collapse; margin-bottom: 30px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+                th, td { border: 1px solid #dee2e6; padding: 12px; text-align: center; font-size: 14px; }
+                th { background-color: #2a5298; color: white; font-weight: bold; }
+                .grados-col { text-align: left; font-weight: bold; background: #f1f3f5; }
+                .totales-f { font-weight: bold; background: #e9ecef; }
+                .contenedor-grafico { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 800px; margin: 0 auto 30px auto; }
+                .btn-print { background: #28a745; color: white; padding: 12px 25px; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; display: block; margin-bottom: 20px; }
+                @media print { .btn-print { display: none; } }
+            </style>
+        </head>
+        <body>
+            <button class="btn-print" onclick="window.print()">🖨️ Imprimir Consolidado / PDF</button>
+
+            <div class="header-c">
+                <h2>📊 CONSOLIDADO GENERAL DE ASISTENCIA</h2>
+                <strong>INSTITUCIÓN:</strong> ${infoGeneral.colegio} | <strong>AÑO:</strong> ${infoGeneral.anio} | <strong>MES EVALUADO:</strong> ${mesActual}
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>GRADO Y SECCIÓN</th>
+                        <th style="background-color: #28a745;">TOTAL ASISTENCIAS (✅)</th>
+                        <th style="background-color: #ff9800;">TOTAL TARDANZAS (⏰)</th>
+                        <th style="background-color: #dc3545;">TOTAL FALTAS (❌)</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-c-body"></tbody>
+            </table>
+
+            <div class="contenedor-grafico">
+                <h3 style="text-align:center; margin-top:0; color:#1e3c72;">Comparativa de Asistencia - Mes: ${mesActual}</h3>
+                <canvas id="graficoConsolidado"></canvas>
+            </div>
+
+            <script>
+                const datos = ${dataJSON};
+                const tbody = document.getElementById("tabla-c-body");
+                let sumA = 0, sumT = 0, sumF = 0;
+                
+                datos.forEach(g => {
+                    sumA += g.A; sumT += g.T; sumF += g.F;
                     tbody.innerHTML += \`
-                        <tr class="totales-f">
-                            <td>TOTAL GENERAL (I.E.P.)</td>
-                            <td>\${sumA}</td>
-                            <td>\${sumT}</td>
-                            <td>\${sumF}</td>
+                        <tr>
+                            <td class="grados-col">\${g.grado}</td>
+                            <td style="font-weight:bold; color:#218838;">\${g.A}</td>
+                            <td style="font-weight:bold; color:#d39e00;">\${g.T}</td>
+                            <td style="font-weight:bold; color:#c82333;">\${g.F}</td>
                         </tr>
                     \`;
-                    const ctx = document.getElementById('graficoConsolidado').getContext('2d');
-                    new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: datos.map(g => g.grado),
-                            datasets: [
-                                { label: 'Asistencias (✅)', data: datos.map(g => g.A), backgroundColor: '#4caf50', borderColor: '#388e3c', borderWidth: 1 },
-                                { label: 'Tardanzas (⏰)', data: datos.map(g => g.T), backgroundColor: '#ff9800', borderColor: '#f57c00', borderWidth: 1 },
-                                { label: 'Faltas (❌)', data: datos.map(g => g.F), backgroundColor: '#f44336', borderColor: '#d32f2f', borderWidth: 1 }
-                            ]
+                });
+                
+                tbody.innerHTML += \`
+                    <tr class="totales-f">
+                        <td>TOTAL GENERAL (I.E.P.)</td>
+                        <td>\${sumA}</td>
+                        <td>\${sumT}</td>
+                        <td>\${sumF}</td>
+                    </tr>
+                \`;
+
+                const ctx = document.getElementById('graficoConsolidado').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: datos.map(g => g.grado),
+                        datasets: [
+                            { label: 'Asistencias (✅)', data: datos.map(g => g.A), backgroundColor: '#4caf50', borderColor: '#388e3c', borderWidth: 1 },
+                            { label: 'Tardanzas (⏰)', data: datos.map(g => g.T), backgroundColor: '#ff9800', borderColor: '#f57c00', borderWidth: 1 },
+                            { label: 'Faltas (❌)', data: datos.map(g => g.F), backgroundColor: '#f44336', borderColor: '#d32f2f', borderWidth: 1 }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: { beginAtZero: true, title: { display: true, text: 'Cantidad de Registros', font: { weight: 'bold' } } },
+                            x: { title: { display: true, text: 'Grados Evaluados', font: { weight: 'bold' } } }
                         },
-                        options: {
-                            responsive: true,
-                            scales: {
-                                y: { beginAtZero: true },
-                                x: { title: { display: true, text: 'Grados Evaluados' } }
-                            }
-                        }
-                    });
-                <\/script>
-            </body>
-            </html>
-        `);
-        ventanaConsolidado.document.close();
-    });
+                        plugins: { legend: { position: 'top' } }
+                    }
+                });
+            <\/script>
+        </body>
+        </html>
+    `);
+    ventanaConsolidado.document.close();
 }
 </script>
+
 </body>
 </html>
