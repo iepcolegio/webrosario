@@ -273,7 +273,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
 <script>
-// 🚨 REEMPLAZA AQUÍ CON TUS DATOS REALES DE TU PANTALLA DE FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyCZJH0cbjnnZwyfQ0oWhqmtja43qmvbQYc",
   authDomain: "asistencia-secundaria-49def.firebaseapp.com",
@@ -283,7 +282,6 @@ const firebaseConfig = {
   messagingSenderId: "77433002078",
   appId: "1:77433002078:web:ef35f2cb3a46ee4d767ccf"
 };
-
 // Inicializar Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
@@ -314,6 +312,15 @@ const baseAlumnos = {
 
 const listaGrados = ["1° SECUNDARIA", "2° SECUNDARIA", "3° SECUNDARIA", "4° SECUNDARIA", "5° SECUNDARIA"];
 
+function obtenerNodoGrado(grado) {
+    if (grado.includes("1°")) return "primero";
+    if (grado.includes("2°")) return "segundo";
+    if (grado.includes("3°")) return "tercero";
+    if (grado.includes("4°")) return "cuarto";
+    if (grado.includes("5°")) return "quinto";
+    return "general";
+}
+
 function actualizarMesActual() {
     mesActual = document.getElementById("selector-mes").value;
 }
@@ -326,17 +333,26 @@ function abrirAsistencia(grado) {
     document.getElementById("pantalla-asistencia").style.display = "block";
     document.getElementById("titulo-grado").innerText = `📚 Asistencia Escolar - ${grado} (${mesActual})`;
     
+    cargarDatosDesdeNube();
+}
+
+function cargarDatosDesdeNube() {
     const lista = document.getElementById("lista");
     lista.innerHTML = "<p style='text-align:center; padding: 20px;'>Cargando datos desde la nube...</p>";
 
-    // Jalar datos actualizados desde Firebase de forma limpia
-    db.ref(`asistencias/${mesActual}/${gradoActual}`).once('value', (snapshot) => {
-        historial = snapshot.val() || [];
+    let nodoGrado = obtenerNodoGrado(gradoActual);
+
+    db.ref(`asistencias/${mesActual}/${nodoGrado}`).once('value', (snapshot) => {
+        const datosNube = snapshot.val() || {};
+        historial = Object.keys(datosNube).map(fechaKey => {
+            return {
+                fecha: fechaKey.replace('d', '').replace('_', '/'),
+                datos: datosNube[fechaKey]
+            };
+        });
         
-        if (historial.length > 0) {
+        if (historial.length > 0 && !document.getElementById("fecha-asistencia").value) {
             document.getElementById("fecha-asistencia").value = historial[historial.length - 1].fecha;
-        } else {
-            document.getElementById("fecha-asistencia").value = "";
         }
         
         generarListaAlumnos();
@@ -390,37 +406,31 @@ function guardarAsistencia() {
     let fecha = document.getElementById("fecha-asistencia").value.trim();
     
     if (!fecha) {
-        alert("Por favor, ingrese una fecha válida en el recuadro de arriba (ej: 11/05) antes de guardar.");
+        alert("Por favor, ingrese una fecha válida en el recuadro (ej: 11/05) antes de guardar.");
         return;
     }
 
-    // IMPORTANTÍSIMO: Descarga primero lo que está en la nube para fusionar y NO borrar fechas anteriores
-    db.ref(`asistencias/${mesActual}/${gradoActual}`).once('value', (snapshot) => {
-        historial = snapshot.val() || [];
+    // Formato compatible seguro para las llaves de Firebase (ej: d11_05)
+    let fechaKey = "d" + fecha.replace('/', '_');
+    let datosAlumnos = {};
 
-        let indiceExistente = historial.findIndex(r => r.fecha === fecha);
-        let asistencia = { fecha: fecha, datos: {} };
+    const alumnos = baseAlumnos[gradoActual] || [];
+    alumnos.forEach((alumno, i) => {
+        const selectElement = document.getElementById(`estado-${i}`);
+        datosAlumnos[alumno] = selectElement ? selectElement.value : "A";
+    });
 
-        const alumnos = baseAlumnos[gradoActual] || [];
-        alumnos.forEach((alumno, i) => {
-            const selectElement = document.getElementById(`estado-${i}`);
-            asistencia.datos[alumno] = selectElement ? selectElement.value : "A";
-        });
+    let nodoGrado = obtenerNodoGrado(gradoActual);
 
-        if (indiceExistente !== -1) {
-            historial[indiceExistente] = asistencia;
+    // Guardar directo sin interferencias
+    db.ref(`asistencias/${mesActual}/${nodoGrado}/${fechaKey}`).set(datosAlumnos, (error) => {
+        if (error) {
+            alert("❌ Error al guardar en la nube: " + error.message);
         } else {
-            historial.push(asistencia);
+            // ¡MENSAJE DE CONFIRMACIÓN DE GUARDADO POR DÍA EXITOSO!
+            alert(`💾 ¡ASISTENCIA GUARDADA POR DÍA!\n\nLos datos del día [ ${fecha} ] para [ ${gradoActual} ] se grabaron con éxito en la nube.`);
+            cargarDatosDesdeNube(); // Recargar la lista para confirmar visualmente
         }
-
-        // Sube la información completa sin destruir el pasado
-        db.ref(`asistencias/${mesActual}/${gradoActual}`).set(historial, (error) => {
-            if (error) {
-                alert("Error al guardar en la nube: " + error.message);
-            } else {
-                alert(`Asistencia del día ${fecha} (${mesActual}) Guardada en la Nube Exitosamente.`);
-            }
-        });
     });
 }
 
@@ -436,7 +446,8 @@ function nuevaAsistencia() {
 
 function eliminarHistorial() {
     if (confirm(`¿Eliminar todo el historial de ${gradoActual} del mes de ${mesActual} en la nube?`)) {
-        db.ref(`asistencias/${mesActual}/${gradoActual}`).remove(() => {
+        let nodoGrado = obtenerNodoGrado(gradoActual);
+        db.ref(`asistencias/${mesActual}/${nodoGrado}`).remove(() => {
             historial = [];
             document.getElementById("fecha-asistencia").value = "";
             alert(`Historial de ${mesActual} eliminado de la nube`);
@@ -456,12 +467,13 @@ function eliminarMesCompleto() {
     }
 }
 
-// CORREGIDO: Reporte por Grado ahora calcula los totales y sumas perfectamente jalando datos en tiempo real
 function exportarVistaWeb() {
     if (historial.length === 0) {
         alert(`No hay datos guardados para mostrar en este mes (${mesActual}).`);
         return;
     }
+
+    historial.sort((a, b) => a.fecha.localeCompare(b.fecha));
 
     const alumnos = baseAlumnos[gradoActual] || [];
     let totalesPorFecha = {};
@@ -508,7 +520,6 @@ function exportarVistaWeb() {
         tablaHTML += `<td style="font-weight: bold; background-color: #fce4d6;">${contadorAlumnoF}</td></tr>`;
     });
 
-    // Filas inferiores de totales calculados automáticamente
     tablaHTML += `<tr style="height: 24px; font-weight: bold; background-color: #d9e1f2;"><td colspan="2" style="text-align: right; padding-right: 10px;">TOTAL ASISTENCIAS (✅)</td>`;
     historial.forEach(r => { tablaHTML += `<td>${totalesPorFecha[r.fecha].A}</td>`; });
     tablaHTML += `<td colspan="3" style="background-color: #b4c6e7;">${granTotalA} Total</td></tr>`;
@@ -540,7 +551,6 @@ function exportarVistaWeb() {
     ventanaReporte.document.close();
 }
 
-// CORREGIDO: Consolidado General lee todos los datos guardados en la nube y arma la tabla interactiva y gráficos
 function abrirConsolidadoWeb() {
     actualizarMesActual();
     
@@ -549,17 +559,16 @@ function abrirConsolidadoWeb() {
         let datosConsolidados = [];
         
         listaGrados.forEach(grado => {
-            let hG = todoElMes[grado] || [];
+            let nodoGrado = obtenerNodoGrado(grado);
+            let fechasGrado = todoElMes[nodoGrado] || {};
             let totalA = 0, totalT = 0, totalF = 0;
             
-            hG.forEach(registro => {
-                if (registro && registro.datos) {
-                    Object.values(registro.datos).forEach(estado => {
-                        if (estado === "A") totalA++;
-                        if (estado === "T") totalT++;
-                        if (estado === "F") totalF++;
-                    });
-                }
+            Object.values(fechasGrado).forEach(datosFecha => {
+                Object.values(datosFecha).forEach(estado => {
+                    if (estado === "A") totalA++;
+                    if (estado === "T") totalT++;
+                    if (estado === "F") totalF++;
+                });
             });
             
             datosConsolidados.push({ grado, A: totalA, T: totalT, F: totalF });
@@ -665,6 +674,5 @@ function abrirConsolidadoWeb() {
     });
 }
 </script>
-
 </body>
 </html>
