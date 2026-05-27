@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal Escolar - Asistencia</title>
+
+<style>
+    /* --- ESTILOS GENERALES Y MENÚ PRINCIPAL --- */
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to right, #1e3c72, #2a5298);
+        text-align: center;
+        color: white;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+    }
+
+    .contenedor-menu {
+        margin-top: 30px;
+        display: block;
+    }
+
+    h1 {
+        margin-top: 10px;
+        font-size: 32px;
+    }
+
+    .caja-mes {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 15px;
+        border-radius: 12px;
+        width: 280px;
+        margin: 20px auto 0 auto;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .caja-mes label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8px;
+        font-size: 16px;
+        color: #ffcc00;
+    }
+
+    .select-mes-principal {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: none;
+        font-size: 16px;
+        font-weight: bold;
+        color: #1e3c72;
+        background: white;
+        cursor: pointer;
+        box-sizing: border-box;
+    }
+
+    /* Nuevos estilos para los campos de texto del consolidado en el menú */
+    .input-consolidado-menu {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        border: none;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    .botones-menu {
+        margin-top: 25px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .boton-grado {
+        width: 250px;
+        padding: 15px;
+        font-size: 18px;
+        border-radius: 10px;
+        background: #ffcc00;
+        color: black;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s;
+        border: none;
+        cursor: pointer;
+    }
+
+    .boton-grado:hover {
+        background: #ffaa00;
+        transform: scale(1.05);
+    }
+
+    .boton-consolidado {
+        background: #00ecb8;
+        color: #03233c;
+        margin-top: 5px;
+        border: 2px solid white;
+    }
+    .boton-consolidado:hover {
+        background: #00c499;
+    }
+
+    .boton-eliminar-mes {
+        background: #dc3545;
+        color: white;
+        margin-top: 5px;
+        border: 2px solid white;
+        font-size: 15px;
+        width: 250px;
+    }
+    .boton-eliminar-mes:hover {
+        background: #bd2130;
+    }
+
+    /* --- ESTILOS DE LA SECCIÓN DE ASISTENCIA --- */
+    .seccion-asistencia {
+        display: none;
+        background: #f2f2f2;
+        color: black;
+        padding: 20px;
+        min-height: 100vh;
+        box-sizing: border-box;
+        text-align: left;
+    }
+
+    .seccion-asistencia h2 {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    /* Estilo de los selectores de fecha, docente y área */
+    .caja-fecha-registro {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+    }
+    
+    .grupo-input {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .grupo-input label {
+        font-weight: bold;
+        font-size: 14px;
+        color: #1e3c72;
+        margin-bottom: 5px;
+    }
+
+    .grupo-input input {
+        padding: 8px;
+        font-size: 16px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-weight: bold;
+    }
+
+    /* Estilo visual para campos heredados que no se deben editar en el grado */
+    .input-bloqueado {
+        background-color: #e9ecef;
+        color: #495057;
+        cursor: not-allowed;
+    }
+
+    .card {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .nombre {
+        font-size: 18px;
+        margin-bottom: 10px;
+        font-weight: bold;
+        word-break: break-word;
+    }
+
+    select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 16px;
+    }
+
+    .botones-asistencia {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .btn-action {
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-size: 17px;
+        cursor: pointer;
+        transition: 0.3s;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .btn-action:hover {
+        opacity: 0.9;
+        transform: scale(1.02);
+    }
+
+    .volver { background: #6c757d; margin-bottom: 15px; }
+    .guardar { background: #28a745; }
+    .nueva { background: #ff9800; }
+    .exportar { background: #007bff; }
+    .eliminar { background: #dc3545; }
+</style>
+</head>
+
+<body>
+
+<div id="pantalla-menu" class="contenedor-menu">
+    <img src="insignia3.jpg" width="100px" height="140px" onerror="this.src='insignia.jpg'">
+    <h1>Asistencia de Secundaria</h1>
+
+    <div class="caja-mes">
+        <label for="selector-mes">📅 SELECCIONAR MES DE TRABAJO:</label>
+        <select id="selector-mes" class="select-mes-principal" onchange="actualizarMesActual()">
+            <option value="MARZO">MARZO</option>
+            <option value="ABRIL">ABRIL</option>
+            <option value="MAYO" selected>MAYO</option>
+            <option value="JUNIO">JUNIO</option>
+            <option value="JULIO">JULIO</option>
+            <option value="AGOSTO">AGOSTO</option>
+            <option value="SETIEMBRE">SETIEMBRE</option>
+            <option value="OCTUBRE">OCTUBRE</option>
+            <option value="NOVIEMBRE">NOVIEMBRE</option>
+            <option value="DICIEMBRE">DICIEMBRE</option>
+        </select>
+
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.3); margin: 15px 0;">
+        <label style="color: #00ecb8; font-size: 14px;">📝 DATOS PARA EL CONSOLIDADO:</label>
+        <input type="text" id="consolidado-docente" class="input-consolidado-menu" placeholder="Nombre del Docente" oninput="guardarDatosGlobales()">
+        <input type="text" id="consolidado-area" class="input-consolidado-menu" placeholder="Área / Curso" oninput="guardarDatosGlobales()">
+    </div>
+
+    <div class="botones-menu">
+        <button class="boton-grado" onclick="abrirAsistencia('1° SECUNDARIA')">1° de Secundaria</button>
+        <button class="boton-grado" onclick="abrirAsistencia('2° SECUNDARIA')">2° de Secundaria</button>
+        <button class="boton-grado" onclick="abrirAsistencia('3° SECUNDARIA')">3° de Secundaria</button>
+        <button class="boton-grado" onclick="abrirAsistencia('4° SECUNDARIA')">4° de Secundaria</button>
+        <button class="boton-grado" onclick="abrirAsistencia('5° SECUNDARIA')">5° de Secundaria</button>
+        
+        <button class="boton-grado boton-consolidado" onclick="abrirConsolidadoWeb()">📊 Consolidado General</button>
+        
+        <button class="boton-grado boton-eliminar-mes" onclick="eliminarMesCompleto()">🗑️ Eliminar Datos del Mes</button>
+    </div>
+</div>
+
+<div id="pantalla-asistencia" class="seccion-asistencia">
+    
+    <button class="btn-action volver" onclick="volverAlMenu()">⬅ Volver al Menú</button>
+
+    <p align="center">
+        <img src="insignia.jpg" width="60" height="70" onerror="this.src='insignia3.jpg'">
+    </p>
+
+    <h2 id="titulo-grado">📚 Asistencia Escolar</h2>
+
+    <div class="caja-fecha-registro">
+        <div class="grupo-input">
+            <label for="fecha-asistencia">📆 Fecha del Registro:</label>
+            <input type="text" id="fecha-asistencia" placeholder="Ej: 11/05" onchange="cargarAsistenciaPorFecha()">
+        </div>
+        <div class="grupo-input">
+            <label for="docente-asistencia">👨‍🏫 Docente / Profesor:</label>
+            <input type="text" id="docente-asistencia" class="input-bloqueado" readonly placeholder="(Se define en el menú)">
+        </div>
+        <div class="grupo-input">
+            <label for="area-asistencia">📖 Área / Curso:</label>
+            <input type="text" id="area-asistencia" class="input-bloqueado" readonly placeholder="(Se define en el menú)">
+        </div>
+    </div>
+
+    <div id="lista"></div>
+
+    <div class="botones-asistencia">
+        <button class="btn-action guardar" onclick="guardarAsistencia()">
+            💾 Guardar Asistencia
+        </button>
+        <button class="btn-action nueva" onclick="nuevaAsistencia()">
+            ➕ Nueva Asistencia (Reiniciar Lista)
+        </button>
+        <button class="btn-action exportar" onclick="exportarVistaWeb()">
+            📊 Ver Reporte / Imprimir
+        </button>
+        <button class="btn-action eliminar" onclick="eliminarHistorial()">
+            🗑️ Eliminar Historial (Grado Activo)
+        </button>
+    </div>
+</div>
+
+<script>
+let gradoActual = "";
+let mesActual = "MAYO";
+let historial = [];
+
+const infoGeneral = {
+    colegio: "IEP 20125 NUESTRA SEÑORA DEL ROSARIO",
+    anio: "2026"
+};
+
+const baseAlumnos = {
+    "1° SECUNDARIA": [
+        "ABURTO PEREZ NARDAV.", "ABURTO ZAMUDIO ANA TALIA", "AVALOS HERRERA THIAGO", "AVALOS CHUMPITAZ ZOE THAIS",
+        "BLANCO REYES ALEJANDRA", "CHUMPITAZ BALTAZAR KIARA", "CRISPIN QUISPE DAYRO", "FLORES SAAVEDRA ALEJANDRA",
+        "GARCIA FERNANDEZ FERNANDA", "HERNANDEZ BANDES WILLIAM", "MALASQUEZ CHUMPITAZ ANGEL", "MALASQUEZ CHUMPITAZ ROXETTE",
+        "MALASQUEZ LOZANO ANAHI", "MALASQUEZ VILLALOBOS KAZUMI", "OCHOA QUISPE ARELIZ AIXA", "PIGUAY VASQUEZ LUIS GERARD",
+        "PIZANGO FLORES SELVIA", "RAMOS CAMPOS XIARA", "SILOPU ARCOS FREDY", "SILVA MONTILLA YOSGUER",
+        "VILLALOBOS QUISPE LUIS", "VILLALOBOS CAMACHO JEAN CARLOS", "ZAMUDIO AVALOS MARIA", "SALAZAR NEYRA JAIRO"
+    ],
+    "2° SECUNDARIA": ["ABURTO ZAVALA NAIRA MAITE", "ACUÑA QUISPE ALICIA NICOLE", "AGUILAR NEYRA ESTEFANI ABIGAIL", "ARCOS EGUSQUIZA LEONARDO EZEQUIEL", "ARIAS LIMA ALESSIA BRIANA", "ARIAS SALINAS KAHORI MARILENY", "ARIAS VILLALOBOS JEAN POOL", "AVALOS ARIAS JOSE MARIA", "BENAVENTE MALASQUEZ ISAAC EDUARDO", "CANDELA CASTILLO ESTEBAN", "CANDELA PEREZ JASUE", "CASILLA ARCOS KAORY KATSUMY", "CHUMPITAZ ROSAS VALESKA ELIZABETH", "DIAZ ARIAS ANGELI", "GARCIA ARIAS JIMENA ANTUANETH", "FLORES SAAVEDRA FABIANA YACET", "LARA PAREDES ROSA FERNANDA", "MENDIGUETE ACUÑA FRANCO NICOLAS", "MEZA CHUMPITAZ DAYANA BEATRIZ", "QUISPE FRANCIA LUISA MARIA", "RODRIGUEZ ABURTO MARIA GUADALUPE", "VILLALOBOS ARIAS OSSTIN JOSUE", "VILLALOBOS QUISPE MIGUEL ANGEL", "ZAPATA HERRERA BYRON", "CHAVEZ FLORES DARLYN", "SALAZAR NEIRA ANI", "ESPINO MENDOZA NAHUM JHOKADY"],
+    "3° SECUNDARIA": ["ALLANTA QUIROZ THAMARA LUCIA", "AVALOS MALDONADO TILSA MARIA", "ARIAS ORBE SARAI KARUMI", "AVALOS VASQUEZ JUAN JOSÉ", "CAMPOS MERCADO KATHERINE NICOL", "CARBAJAL RIVERA EDGAR GEORGE GABRIEL", "CASTELL TENEMAS NAYLIN YAMIL", "CHOZ CISNEROS JUAN ANDRES", "CHUMPITAZ CERRON HARUMI XIOMARA", "DAVILA VARGAS JHELEN NAOMI", "ESQUEN MEJIA DARREL ANDRE", "FRANCIA HERNANDEZ EDISON JOSEMARIA", "GARCIA MALASQUEZ TAYRA ANGELY", "LEON CHUMPITAZ DYLAN MANUEL ANDRES", "MALASQUEZ ABURTO JHEFREE GONZALO", "PIGUAY DOMINGUEZ MARIA DE LOS ANGELES", "RAMOS ANGULO KRIZIA ZAGHENY MARCELA", "RENGIFO QUISPE MONICA KAORI", "SANCHEZ CAMPOS DREY ABDUL", "SUAREZ SANCHEZ BRUCE WILLIANS", "VILLALOBOS CAMACHO GUADALUPE", "VILLALOBOS SAIRE SITA TAKURANI", "VILLALOBOS VILLALOBOS PARVATI DEVI"],
+    "4° SECUNDARIA": ["ABURTO GUZMAN LUHANA KAHORY", "ARIAS ACUÑA JOSIANA MARIA V.", "ARIAS QUISPE JOSE GONZALO", "ARIAS RAMOS ROBERTO FRANCISCO", "ARQUIÑEVA AVALOS MELANY REBECA", "AVALOS SANCHEZ MARIA ELITIA NAOMI", "CASTAÑEDA HUAPAYA LUANA GAHELA", "CRISPIN QUISPE ANDRELY SOLEDAD", "CHUMPITAZ ROJAS MARIA ALMENDRA", "CHUMPITAZ ROSAS AIMEE MARLENE", "GARCIA MARCA BLENI YUZELI", "GARCIA ORE THIAGO MATEO", "GARCIA VILLALOBOS NISHINJA DEVA", "MEZA QUISPE GENESIS ROSSMERY", "MOYA CASTILLO ANDREA ALEXANDRA", "NARRO ARIAS GREACE DAYANNA", "RAMOS AVALOS YERIK ANYELO YAMIL", "TASAYCO ROJAS ALVARO YHAJAIRO", "TOMAS PULIDO ALLISON TATIANA"],
+    "5° SECUNDARIA": ["ABURTO PEREZ YASMIN GABRIELA", "ALIAGA MANIHUARI LEONARDO DAVID", "ANGELES CHUMPITAZ CHERLIT FIORELLA", "ARANA VILCA MARIA PALOMA", "ARIAS CAMPOS FABIAN ALEXANDER", "ARIAS LIMA AXEL FRANCISCO", "ARIAS VILLALOBOS YASURI", "AVALOS AVALOS LUHANA BELEN", "AVALOS QUISPE VICTOR ALONSO SAMIR", "CAMPOS AQUINO ABIGAIL GUADALUPE", "CAMPOS BARTOLO DANY DANIEL", "CAMPOS NAPAN LUZ ANDREA", "CAMPOS SOLER KATSUMI SAHORI", "CAMPOS YAYA DENNISES YOELI", "CANDELA CHAVEZ STEPHANO DENILSON", "CANDELA PACHECO DAYANA ANTUANET", "CASTILLO CAMPOS ROSA RUBI RINA", "DAVILA ZAVALA CELESTE ADRIANA", "GARCIA MALASQUEZ ALESSIA ISABEL", "GARCIA MALASQUEZ FERGIE ESMERALDA", "GARCIA VILLALOBOS VRNDA DEVI", "PAZ BERRU NEYSER YOEL", "PELAEZ AVALOS MARJORIE ESPERANZA", "QUIQUIA VASQUEZ YASUMI XIOMARA", "RODRIGUEZ ANGULO JIORDANA R.", "ROJAS MEDINA ARIADNA IVANA", "SANCHEZ ROSAS JUAN PABLO", "SILOPU ARCOS MARIA DEL CARMEN", "SUAREZ ARCOS AYTANA MARIA M.", "SUAREZ SANCHEZ DEYVID DAVID"]
+};
+
+const listaGrados = ["1° SECUNDARIA", "2° SECUNDARIA", "3° SECUNDARIA", "4° SECUNDARIA", "5° SECUNDARIA"];
+
+// Cargar datos guardados previamente al iniciar la página
+window.onload = function() {
+    document.getElementById("consolidado-docente").value = localStorage.getItem("global_docente") || "";
+    document.getElementById("consolidado-area").value = localStorage.getItem("global_area") || "";
+}
+
+function guardarDatosGlobales() {
+    let doc = document.getElementById("consolidado-docente").value.trim();
+    let ar = document.getElementById("consolidado-area").value.trim();
+    localStorage.setItem("global_docente", doc);
+    localStorage.setItem("global_area", ar);
+}
+
+function actualizarMesActual() {
+    mesActual = document.getElementById("selector-mes").value;
+}
+
+function abrirAsistencia(grado) {
+    gradoActual = grado;
+    actualizarMesActual();
+
+    document.getElementById("pantalla-menu").style.display = "none";
+    document.getElementById("pantalla-asistencia").style.display = "block";
+    
+    document.getElementById("titulo-grado").innerText = `📚 Asistencia Escolar - ${grado} (${mesActual})`;
+    
+    document.getElementById("fecha-asistencia").value = "";
+    
+    // Auto-completar los campos desde los inputs del menú principal
+    let docenteGlobal = document.getElementById("consolidado-docente").value.trim();
+    let areaGlobal = document.getElementById("consolidado-area").value.trim();
+    document.getElementById("docente-asistencia").value = docenteGlobal || "No especificado";
+    document.getElementById("area-asistencia").value = areaGlobal || "No especificado";
+    
+    historial = JSON.parse(localStorage.getItem(`historial_${gradoActual}_${mesActual}`)) || [];
+    
+    generarListaAlumnos();
+}
+
+function volverAlMenu() {
+    document.getElementById("pantalla-asistencia").style.display = "none";
+    document.getElementById("pantalla-menu").style.display = "block";
+}
+
+function generarListaAlumnos() {
+    const lista = document.getElementById("lista");
+    lista.innerHTML = "";
+    const alumnos = baseAlumnos[gradoActual] || [];
+
+    if(alumnos.length === 0) {
+        lista.innerHTML = "<p style='text-align:center; padding: 20px;'>No hay alumnos registrados en este grado.</p>";
+        return;
+    }
+
+    const fechaSeleccionada = document.getElementById("fecha-asistencia").value.trim();
+    let registroExistente = historial.find(r => r.fecha === fechaSeleccionada);
+
+    // Mantenemos siempre los valores del menú principal, a menos que no haya nada y usemos los históricos
+    if (!registroExistente) {
+        let docenteGlobal = document.getElementById("consolidado-docente").value.trim();
+        let areaGlobal = document.getElementById("consolidado-area").value.trim();
+        document.getElementById("docente-asistencia").value = docenteGlobal || "No especificado";
+        document.getElementById("area-asistencia").value = areaGlobal || "No especificado";
+    } else {
+        // Si hay registro guardado, se respeta lo guardado o el global actual en su defecto
+        document.getElementById("docente-asistencia").value = registroExistente.docente || document.getElementById("consolidado-docente").value.trim() || "No especificado";
+        document.getElementById("area-asistencia").value = registroExistente.area || document.getElementById("consolidado-area").value.trim() || "No especificado";
+    }
+
+    alumnos.forEach((alumno, index) => {
+        let estadoGuardado = "A"; 
+        
+        if (registroExistente && registroExistente.datos && registroExistente.datos[alumno]) {
+            estadoGuardado = registroExistente.datos[alumno];
+        }
+
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+            <div class="nombre">${index + 1}. ${alumno}</div>
+            <select id="estado-${index}">
+                <option value="A" ${estadoGuardado === 'A' ? 'selected' : ''}>✅ Asistió</option>
+                <option value="F" ${estadoGuardado === 'F' ? 'selected' : ''}>❌ Faltó</option>
+                <option value="T" ${estadoGuardado === 'T' ? 'selected' : ''}>⏰ Tarde</option>
+            </select>
+        `;
+        lista.appendChild(card);
+    });
+}
+
+function cargarAsistenciaPorFecha() {
+    generarListaAlumnos();
+}
+
+function guardarAsistencia() {
+    let fecha = document.getElementById("fecha-asistencia").value.trim();
+    let docente = document.getElementById("docente-asistencia").value.trim();
+    let area = document.getElementById("area-asistencia").value.trim();
+    
+    if (!fecha) {
+        alert("Por favor, ingrese una fecha válida en el recuadro de arriba (ej: 11/05) antes de guardar.");
+        return;
+    }
+
+    let indiceExistente = historial.findIndex(r => r.fecha === fecha);
+
+    let asistencia = {
+        fecha: fecha,
+        docente: docente,
+        area: area,
+        datos: {}
+    };
+
+    const alumnos = baseAlumnos[gradoActual] || [];
+    alumnos.forEach((alumno, i) => {
+        asistencia.datos[alumno] = document.getElementById(`estado-${i}`).value;
+    });
+
+    if (indiceExistente !== -1) {
+        historial[indiceExistente] = asistencia;
+    } else {
+        historial.push(asistencia);
+    }
+
+    localStorage.setItem(`historial_${gradoActual}_${mesActual}`, JSON.stringify(historial));
+    alert(`Asistencia del día ${fecha} (${mesActual}) Guardada Exitosamente.`);
+}
+
+function nuevaAsistencia() {
+    const alumnos = baseAlumnos[gradoActual] || [];
+    alumnos.forEach((_, i) => {
+        const select = document.getElementById(`estado-${i}`);
+        if(select) select.value = "A";
+    });
+    alert("Selectores reiniciados temporalmente en pantalla.");
+}
+
+function eliminarHistorial() {
+    if (confirm(`¿Eliminar todo el historial de ${gradoActual} del mes de ${mesActual}?`)) {
+        localStorage.removeItem(`historial_${gradoActual}_${mesActual}`);
+        historial = [];
+        document.getElementById("fecha-asistencia").value = "";
+        generarListaAlumnos();
+        alert(`Historial de ${mesActual} eliminado`);
+    }
+}
+
+function eliminarMesCompleto() {
+    actualizarMesActual();
+    if (confirm(`⚠ ATENCIÓN: ¿Está completamente seguro de que desea eliminar TODO el historial de asistencia de los CINCO GRADOS correspondientes al mes de ${mesActual}?`)) {
+        if (confirm(`🚨 ¡ESTA ACCIÓN NO SE PUEDE DESHACER!\nSe borrarán las asistencias de 1°, 2°, 3°, 4° y 5° de Secundaria del mes de ${mesActual}.\n\n¿Desea continuar de todos modos?`)) {
+            listaGrados.forEach(grado => {
+                localStorage.removeItem(`historial_${grado}_${mesActual}`);
+            });
+            alert(`🗑 Los registros de asistencia del mes de ${mesActual} han sido eliminados por completo de toda la institución.`);
+        }
+    }
+}
+
+function exportarVistaWeb() {
+    if (historial.length === 0) {
+        alert(`No hay datos guardados para mostrar en este mes (${mesActual}).`);
+        return;
+    }
+
+    const alumnos = baseAlumnos[gradoActual] || [];
+    let totalesPorFecha = {};
+    historial.forEach(r => { totalesPorFecha[r.fecha] = { A: 0, T: 0, F: 0 }; });
+    let granTotalA = 0, granTotalT = 0, granTotalF = 0;
+
+    // Aquí ahora lee directamente lo que haya guardado en el reporte o en el menú principal de forma directa
+    let docenteReporte = document.getElementById("consolidado-docente").value.trim() || "No especificado";
+    let areaReporte = document.getElementById("consolidado-area").value.trim() || "No especificado";
+
+    let tablaHTML = `
+    <table border="1" style="border-collapse: collapse; width: 100%; font-family: Arial; font-size: 12px; text-align: center;">
+        <thead>
+            <tr style="background-color: #007BFF; color: white; font-weight: bold; height: 30px;">
+                <th style="width: 40px;">N°</th>
+                <th style="text-align: left; padding-left: 10px; width: 280px;">ALUMNO</th>
+    `;
+
+    historial.forEach(r => { tablaHTML += `<th style="width: 50px;">${r.fecha}</th>`; });
+
+    tablaHTML += `
+                <th style="background-color: #28a745; color: white; width: 50px;">TOT Asis</th>
+                <th style="background-color: #ff9800; color: white; width: 50px;">TOT Tard</th>
+                <th style="background-color: #dc3545; color: white; width: 50px;">TOT Falt</th>
+            </tr>
+        </thead>
+        <tbody>
+    `;
+
+    alumnos.forEach((alumno, i) => {
+        let contadorAlumnoA = 0, contadorAlumnoT = 0, contadorAlumnoF = 0;
+        tablaHTML += `<tr style="height: 24px;">`;
+        tablaHTML += `<td>${i + 1}</td>`;
+        tablaHTML += `<td style="text-align: left; padding-left: 10px; font-weight: bold;">${alumno}</td>`;
+
+        historial.forEach(r => {
+            let estado = r.datos[alumno] || "-";
+            let colorCelda = "";
+            if (estado === "A") { colorCelda = "background-color: #90EE90; font-weight: bold;"; contadorAlumnoA++; totalesPorFecha[r.fecha].A++; }
+            else if (estado === "T") { colorCelda = "background-color: #FFD966; font-weight: bold;"; contadorAlumnoT++; totalesPorFecha[r.fecha].T++; }
+            else if (estado === "F") { colorCelda = "background-color: #FF7B7B; font-weight: bold;"; contadorAlumnoF++; totalesPorFecha[r.fecha].F++; }
+            tablaHTML += `<td style="${colorCelda}">${estado}</td>`;
+        });
+
+        granTotalA += contadorAlumnoA; granTotalT += contadorAlumnoT; granTotalF += contadorAlumnoF;
+        tablaHTML += `<td style="font-weight: bold; background-color: #e2f0d9;">${contadorAlumnoA}</td>`;
+        tablaHTML += `<td style="font-weight: bold; background-color: #fff2cc;">${contadorAlumnoT}</td>`;
+        tablaHTML += `<td style="font-weight: bold; background-color: #fce4d6;">${contadorAlumnoF}</td></tr>`;
+    });
+
+    tablaHTML += `<tr style="height: 24px; font-weight: bold; background-color: #d9e1f2;"><td colspan="2" style="text-align: right; padding-right: 10px;">TOTAL ASISTENCIAS (✅)</td>`;
+    historial.forEach(r => { tablaHTML += `<td>${totalesPorFecha[r.fecha].A}</td>`; });
+    tablaHTML += `<td colspan="3" style="background-color: #b4c6e7;">${granTotalA} Total</td></tr>`;
+
+    tablaHTML += `<tr style="height: 24px; font-weight: bold; background-color: #fff2cc;"><td colspan="2" style="text-align: right; padding-right: 10px;">TOTAL TARDANZAS (⏰)</td>`;
+    historial.forEach(r => { tablaHTML += `<td>${totalesPorFecha[r.fecha].T}</td>`; });
+    tablaHTML += `<td colspan="3" style="background-color: #ffe699;">${granTotalT} Total</td></tr>`;
+
+    tablaHTML += `<tr style="height: 24px; font-weight: bold; background-color: #fce4d6;"><td colspan="2" style="text-align: right; padding-right: 10px;">TOTAL FALTAS (❌)</td>`;
+    historial.forEach(r => { tablaHTML += `<td>${totalesPorFecha[r.fecha].F}</td>`; });
+    tablaHTML += `<td colspan="3" style="background-color: #f8cbad;">${granTotalF} Total</td></tr></tbody></table>`;
+
+    const ventanaReporte = window.open("", "_blank");
+    ventanaReporte.document.write(`
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <title>Reporte de Asistencia - ${gradoActual}</title>
+            <style>body { font-family: Arial, sans-serif; padding: 20px; color: #333; } .header-reporte { margin-bottom: 20px; line-height: 1.6; } .btn-imprimir { background: #007BFF; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-bottom: 20px; } @media print { .btn-imprimir { display: none; } }</style>
+        </head>
+        <body>
+            <button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir / Guardar en PDF</button>
+            <div class="header-reporte">
+                <strong>COLEGIO:</strong> ${infoGeneral.colegio}<br>
+                <strong>GRADO:</strong> ${gradoActual}<br>
+                <strong>AÑO:</strong> ${infoGeneral.anio}<br>
+                <strong>MES:</strong> ${mesActual}<br>
+                <strong>DOCENTE:</strong> ${docenteReporte}<br>
+                <strong>ÁREA / CURSO:</strong> ${areaReporte}
+            </div>
+            ${tablaHTML}
+        </body>
+        </html>
+    `);
+    ventanaReporte.document.close();
+}
+
+function abrirConsolidadoWeb() {
+    actualizarMesActual();
+    
+    let docenteManual = document.getElementById("consolidado-docente").value.trim() || "No especificado";
+    let areaManual = document.getElementById("consolidado-area").value.trim() || "No especificado";
+
+    let datosConsolidados = [];
+    
+    listaGrados.forEach(grado => {
+        let hG = JSON.parse(localStorage.getItem(`historial_${grado}_${mesActual}`)) || [];
+        let totalA = 0, totalT = 0, totalF = 0;
+        
+        hG.forEach(registro => {
+            Object.values(registro.datos).forEach(estado => {
+                if (estado === "A") totalA++;
+                if (estado === "T") totalT++;
+                if (estado === "F") totalF++;
+            });
+        });
+        
+        datosConsolidados.push({ grado, A: totalA, T: totalT, F: totalF });
+    });
+
+    let totalGlobal = datosConsolidados.reduce((sum, g) => sum + g.A + g.T + g.F, 0);
+    if(totalGlobal === 0) {
+        alert(`Aún no existen asistencias guardadas en ningún grado para el mes de ${mesActual}.`);
+        return;
+    }
+
+    const dataJSON = JSON.stringify(datosConsolidados);
+
+    const ventanaConsolidado = window.open("", "_blank");
+    ventanaConsolidado.document.write(`
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <title>Consolidado Institucional - ${mesActual}</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"><\/script>
+            <style>
+                body { font-family: Arial, sans-serif; padding: 25px; background: #f8f9fa; color: #333; }
+                .header-c { background: #1e3c72; color: white; padding: 20px; border-radius: 8px; margin-bottom: 25px; line-height: 1.6; }
+                .header-c h2 { margin: 0 0 10px 0; }
+                table { width: 100%; border-collapse: collapse; margin-bottom: 30px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+                th, td { border: 1px solid #dee2e6; padding: 12px; text-align: center; font-size: 14px; }
+                th { background-color: #2a5298; color: white; font-weight: bold; }
+                .grados-col { text-align: left; font-weight: bold; background: #f1f3f5; }
+                .totales-f { font-weight: bold; background: #e9ecef; }
+                .contenedor-grafico { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 800px; margin: 0 auto 30px auto; }
+                .btn-print { background: #28a745; color: white; padding: 12px 25px; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; display: block; margin-bottom: 20px; }
+                @media print { .btn-print { display: none; } }
+            </style>
+        </head>
+        <body>
+            <button class="btn-print" onclick="window.print()">🖨️ Imprimir Consolidado / PDF</button>
+
+            <div class="header-c">
+                <h2>📊 CONSOLIDADO GENERAL DE ASISTENCIA</h2>
+                <strong>INSTITUCIÓN:</strong> ${infoGeneral.colegio} | <strong>AÑO:</strong> ${infoGeneral.anio} | <strong>MES EVALUADO:</strong> ${mesActual}<br>
+                <strong>DOCENTE:</strong> ${docenteManual} | <strong>ÁREA / CURSO:</strong> ${areaManual}
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>GRADO Y SECCIÓN</th>
+                        <th style="background-color: #28a745;">TOTAL ASISTENCIAS (✅)</th>
+                        <th style="background-color: #ff9800;">TOTAL TARDANZAS (⏰)</th>
+                        <th style="background-color: #dc3545;">TOTAL FALTAS (❌)</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-c-body"></tbody>
+            </table>
+
+            <div class="contenedor-grafico">
+                <h3 style="text-align:center; margin-top:0; color:#1e3c72;">Comparativa de Asistencia - Mes: ${mesActual}</h3>
+                <canvas id="graficoConsolidado"></canvas>
+            </div>
+
+            <script>
+                const datos = ${dataJSON};
+                const tbody = document.getElementById("tabla-c-body");
+                let sumA = 0, sumT = 0, sumF = 0;
+                
+                datos.forEach(g => {
+                    sumA += g.A; sumT += g.T; sumF += g.F;
+                    tbody.innerHTML += \`
+                        <tr>
+                            <td class="grados-col">\${g.grado}</td>
+                            <td style="font-weight:bold; color:#218838;">\${g.A}</td>
+                            <td style="font-weight:bold; color:#d39e00;">\${g.T}</td>
+                            <td style="font-weight:bold; color:#c82333;">\${g.F}</td>
+                        </tr>
+                    \`;
+                });
+                
+                tbody.innerHTML += \`
+                    <tr class="totales-f">
+                        <td>TOTAL GENERAL (I.E.P.)</td>
+                        <td>\${sumA}</td>
+                        <td>\${sumT}</td>
+                        <td>\${sumF}</td>
+                    </tr>
+                \`;
+
+                const ctx = document.getElementById('graficoConsolidado').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: datos.map(g => g.grado),
+                        datasets: [
+                            { label: 'Asistencias (✅)', data: datos.map(g => g.A), backgroundColor: '#4caf50', borderColor: '#388e3c', borderWidth: 1 },
+                            { label: 'Tardanzas (⏰)', data: datos.map(g => g.T), backgroundColor: '#ff9800', borderColor: '#f57c00', borderWidth: 1 },
+                            { label: 'Faltas (❌)', data: datos.map(g => g.F), backgroundColor: '#f44336', borderColor: '#d32f2f', borderWidth: 1 }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: { beginAtZero: true, title: { display: true, text: 'Cantidad de Registros', font: { weight: 'bold' } } },
+                            x: { title: { display: true, text: 'Grados Evaluados', font: { weight: 'bold' } } }
+                        },
+                        plugins: { legend: { position: 'top' } }
+                    }
+                });
+            <\/script>
+        </body>
+        </html>
+    `);
+    ventanaConsolidado.document.close();
+}
+</script>
+
+</body>
+</html>
