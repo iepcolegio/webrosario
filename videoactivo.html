@@ -1,0 +1,243 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reproductor de Videos de Google Drive</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --border-color: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar de Lista de Videos */
+        aside {
+            width: 380px;
+            background-color: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.2rem;
+            color: var(--text-color);
+        }
+
+        .video-list {
+            overflow-y: auto;
+            flex-grow: 1;
+            padding: 10px;
+        }
+
+        .video-item {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .video-item:hover {
+            background-color: rgba(255, 255, 255, 0.07);
+            border-color: var(--border-color);
+        }
+
+        .video-item.active {
+            background-color: var(--accent-color);
+            border-color: var(--accent-hover);
+        }
+
+        .video-item-icon {
+            font-size: 1.2rem;
+        }
+
+        .video-item-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Contenedor Principal del Reproductor */
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            height: 100%;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+        }
+
+        .player-container {
+            width: 100%;
+            max-width: 900px;
+            aspect-ratio: 16/9;
+            background-color: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-color);
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .no-video {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 20px;
+        }
+
+        .no-video span {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        /* Responsive para pantallas pequeñas */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            aside {
+                width: 100%;
+                height: 40%;
+            }
+            main {
+                height: 60%;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Panel Lateral con los Videos -->
+    <aside>
+        <div class="sidebar-header">
+            <h2>🎬 Lista de Reproducción</h2>
+        </div>
+        <div class="video-list" id="videoList">
+            <!-- Los elementos se cargan automáticamente desde JavaScript -->
+        </div>
+    </aside>
+
+    <!-- Área de Reproducción -->
+    <main>
+        <div class="player-container" id="playerContainer">
+            <div class="no-video">
+                <span>📺</span>
+                <p>Selecciona un video de la lista de la izquierda para comenzar a reproducir.</p>
+            </div>
+        </div>
+    </main>
+ 
+    <script>
+        // AQUí PUEDES CAMBIAR EL NOMBRE DE CADA VIDEO Y MANTENER SU LINK
+        const videosData = [
+            { title: "Barra lateral de anotacion", url: "https://drive.google.com/file/d/1Ns1bN3fn8uGk4W77WtKpFsC9yHCjRPsm/view?usp=sharing" },
+            { title: "Barra lateral", url: "https://drive.google.com/file/d/1M0SsTEdkkKWh2I7B6sxxIScWa-LfCbom/view?usp=sharing" },
+            { title: "Captura de pantalla (toda la pantalla o zona)", url: "https://drive.google.com/file/d/1z6RC7fUaD0kXerFkNQPk8qsKL0ANxs1T/view?usp=sharing" },
+            { title: "Configuraciones", url: "https://drive.google.com/file/d/1fTCDr68TAgH45ANoH9ebTL4eMviLW0Vv/view?usp=sharing" },
+            { title: "Apagado 1", url: "https://drive.google.com/file/d/1sWx88S7J5wpyQEG3aCYGP9NHAkUxAdlv/view?usp=sharing" },
+            { title: "Apagado 2", url: "https://drive.google.com/file/d/1UYo2qpiG7ZordLHALJ9-2qwytG8QB_C_/view?usp=sharing" },
+            { title: "Encendido", url: "https://drive.google.com/file/d/1cNbFPOjaWzuHLWUdmwT4kUo7jR-cWe1D/view?usp=sharing" },
+            { title: "Conpartir Informacion", url: "https://drive.google.com/file/d/14Yol8A3wuuRQqEvmSfb6lB1SvBHqnQni/view?usp=sharing" },
+            { title: "Eshare aplicacion (compartir)", url: "https://drive.google.com/file/d/1vqFe0-Xis48eWaLA6aIcglT8Fqsh745E/view?usp=sharing" },
+            { title: "Administracion de archivos de memoria", url: "https://drive.google.com/file/d/157GiMFQK6y2W6NUf4_gGgiAHQepvYaaq/view?usp=sharing" },
+            { title: "Grabar pantalla", url: "https://drive.google.com/file/d/1YoqRCHJn3KdZbu_praBerifWw6ezkS5h/view?usp=sharing" },
+            { title: "Gestion de usuarios", url: "https://drive.google.com/file/d/1h-d1c95xQcsQyFzUM_ESXt4P96jLgP1Z/view?usp=sharing" },
+            { title: "Multiwindow (ventanas en paralelo)", url: "https://drive.google.com/file/d/12Et-lOxZoxMDy05zH96_vgSVtp6sfvD-/view?usp=sharing" },
+            { title: "NFC", url: "https://drive.google.com/file/d/1NS8hubi7ltrH5Zm655jV3eO-__2wFqoo/view?usp=sharing" },
+            { title: "Pizarra (herramientas lapicero)", url: "https://drive.google.com/file/d/1cQP2iwmr3skkqWkkYPYaQi6O_2ioXtwY/view?usp=sharing" },
+            { title: "Ventana de elementos", url: "https://drive.google.com/file/d/1pU4uek9VGxlxjJfF_wRyI7ECvrprqiLS/view?usp=sharing" },
+            { title: "Ventana de inicio", url: "https://drive.google.com/file/d/1CbACQS4BP9zWmoqCDlBu_VOsz8t5UXvy/view?usp=sharing" },
+            { title: "Ventanas recientes", url: "https://drive.google.com/file/d/1EaxH236g4Hzg2Wsq4m89AylSXLqw51xX/view?usp=sharing" },
+            { title: "Zona de Microfonos camaras", url: "https://drive.google.com/file/d/1dtCZ8q_ia-pWvn6Z7PHez8R29fxmu7HM/view?usp=sharing" }
+        ];
+
+
+        // Función para transformar el link de Google Drive a formato Embed/Preview
+        function convertDriveLink(url) {
+            const regex = /\/file\/d\/([a-zA-Z0-9_-]+)/;
+            const match = url.match(regex);
+            if (match && match[1]) {
+                return `https://drive.google.com/file/d/${match[1]}/preview`;
+            }
+            return url;
+        }
+
+        const videoListEl = document.getElementById('videoList');
+        const playerContainer = document.getElementById('playerContainer');
+
+        // Generar lista de videos automáticamente con sus títulos
+        videosData.forEach((video) => {
+            const embedUrl = convertDriveLink(video.url);
+            const videoItem = document.createElement('div');
+            videoItem.classList.add('video-item');
+            
+            videoItem.innerHTML = `
+                <div class="video-item-icon">▶</div>
+                <div class="video-item-title" title="${video.title}">${video.title}</div>
+            `;
+
+            videoItem.addEventListener('click', () => {
+                // Remover clase active de todos los elementos
+                document.querySelectorAll('.video-item').forEach(el => el.classList.remove('active'));
+                // Agregar clase active al elemento actual
+                videoItem.classList.add('active');
+
+                // Cargar iframe con el video seleccionado
+                playerContainer.innerHTML = `
+                    <iframe src="${embedUrl}" allow="autoplay" allowfullscreen></iframe>
+                `;
+            });
+
+            videoListEl.appendChild(videoItem);
+        });
+    </script>
+</body>
+</html>
